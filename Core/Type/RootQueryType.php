@@ -17,10 +17,7 @@
 namespace OxidProfessionalServices\GraphQl\Core\Type;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
-use OxidProfessionalServices\GraphQl\Core\AppContext;
-use OxidProfessionalServices\GraphQl\Model\DataSource;
 use OxidProfessionalServices\GraphQl\Model\Category;
-
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
@@ -31,11 +28,11 @@ use GraphQL\Type\Definition\ResolveInfo;
 class RootQueryType extends ObjectType
 {
     /**
-     * Type name
+     * Type name.
      *
-     * @var string $type_name
+     * @var string
      */
-    private static $typeName = 'rootQuery';
+    private $typeName = 'rootQuery';
 
     /**
      * RootQueryType constructor.
@@ -43,35 +40,35 @@ class RootQueryType extends ObjectType
     public function __construct()
     {
         /**
-         * Configure the RootQuery
+         * Configure the RootQuery.
          */
         $config = [
-            'name'          => self::$typeName,
-            'description'   => 'Root query',
-            'fields'        => self::fields(),
-            'resolveField' => function($val, $args, $context, ResolveInfo $info) {
+            'name' => $this->$typeName,
+            'description' => 'Root query',
+            'fields' => $this->fields(),
+            'resolveField' => function ($val, $args, $context, ResolveInfo $info) {
                 return $this->{$info->fieldName}($val, $args, $context, $info);
-            }
+            },
         ];
 
-        /**
+        /*
          * Pass the config to the parent construct
          */
         parent::__construct($config);
     }
 
     /**
-     * Setup data
+     * Setup data fields.
      */
-    public static function fields()
+    public function fields()
     {
         $fields = [
             'category' => [
                 'type' => Types::category(),
                 'description' => 'Returns category by id',
                 'args' => [
-                    'id' => Types::nonNull(Types::id())
-                ]
+                    'id' => Types::nonNull(Types::id()),
+                ],
             ],
             'categories' => [
                 'type' => Types::listOf(Types::category()),
@@ -80,28 +77,34 @@ class RootQueryType extends ObjectType
                     'limit' => [
                         'type' => Types::int(),
                         'description' => 'Number of categories to be returned',
-                        'defaultValue' => 10
-                    ]
-                ]
+                        'defaultValue' => null,
+                    ],
+                ],
             ],
-            'welcome' => Types::string()
+            'welcome' => Types::string(),
         ];
 
-        /**
+        /*
          * Sort the fields alphabetically by keys
          * (this makes the schema documentation much nicer to browse)
          */
-        ksort( $fields );
+        ksort($fields);
 
         return $fields;
+    }
 
+    public function category($rootValue, $args)
+    {
+        $oCategory = oxNew(Category::class);
+
+        return $oCategory->findCategory($args['id']);
     }
 
     public function categories($rootValue, $args)
     {
         $oCategory = oxNew(Category::class);
-
         $args += ['after' => null];
+
         return $oCategory->findCategories($args['limit'], $args['after']);
     }
 
@@ -109,5 +112,4 @@ class RootQueryType extends ObjectType
     {
         return 'Your OXID GraphQL endpoint is ready! Login in the Admin site and use GraphiQL to browse API';
     }
-
 }

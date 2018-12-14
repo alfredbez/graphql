@@ -63,8 +63,6 @@ class Types
      */
     private static $category;
 
-
-
     /**
      * Stores the node type object
      *
@@ -118,7 +116,7 @@ class Types
     {
         return self::$rootMutation ?: (self::$rootMutation = new RootMutationType());
     }
-    
+
 
     // Object Types
     /**

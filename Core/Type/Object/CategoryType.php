@@ -17,8 +17,7 @@
 namespace OxidProfessionalServices\GraphQl\Core\Type\Object;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
-use OxidProfessionalServices\GraphQl\Model\DataSource;
-
+use OxidProfessionalServices\GraphQl\Model\Category;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
@@ -28,14 +27,14 @@ use GraphQL\Type\Definition\ResolveInfo;
 class CategoryType extends ObjectType
 {
     /**
-     * UserType constructor.
+     * CategoryType constructor.
      */
     public function __construct()
     {
         $config = [
             'name' => 'Category',
             'description' => 'OXID eShop categories',
-            'fields' => function() {
+            'fields' => function () {
                 return [
                     'id' => Types::id(),
                     'title' => Types::string(),
@@ -43,21 +42,34 @@ class CategoryType extends ObjectType
                 ];
             },
             'interfaces' => [
-                Types::node()
+                Types::node(),
             ],
-            'resolveField' => function($value, $args, $context, ResolveInfo $info) {
-                $method = 'resolve' . ucfirst($info->fieldName);
+            'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
+                $method = 'resolve'.ucfirst($info->fieldName);
                 if (method_exists($this, $method)) {
                     return $this->{$method}($value, $args, $context, $info);
                 } else {
-                    //TODO get from object id key
-                    /*return $value->{$info->fieldName};*/
                     return $value[$info->fieldName];
                 }
-            }
+            },
         ];
 
         parent::__construct($config);
     }
 
+    /**
+     * Resolve parent category.
+     *
+     * @param $category
+     */
+    public function resolveParent($category)
+    {
+        if ($category['parent']) {
+            $oCategory = oxNew(Category::class);
+
+            return $oCategory->findCategory($category['parent']);
+        }
+
+        return null;
+    }
 }

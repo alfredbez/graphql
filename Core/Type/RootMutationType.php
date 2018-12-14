@@ -34,14 +34,14 @@ class RootMutationType extends ObjectType
      *
      * @var string $type_name
      */
-    private static $typeName = 'rootMutation';
+    private $typeName = 'rootMutation';
 
     /**
      * Holds the $fields definition.
      *
      * @var $fields
      */
-    private static $fields;
+    private $fields;
 
     /**
      * RootMutationType constructor.
@@ -52,9 +52,9 @@ class RootMutationType extends ObjectType
          * Configure the RootMutation
          */
         $config = [
-            'name'          => self::$typeName,
+            'name'          => $this->$typeName,
             'description'   => 'Root mutation',
-            'fields'        => self::fields(),
+            'fields'        => $this->fields(),
             'resolveField'  => function($val, $args, $context, ResolveInfo $info) {
                 return $this->{$info->fieldName}($val, $args, $context, $info);
             }
@@ -67,11 +67,12 @@ class RootMutationType extends ObjectType
     }
 
     /**
-     * Setup data
+     * Setup data fields.
      */
-    public static function fields()
+    public function fields()
     {
-        if ( null === self::$fields ) {
+        if ( null === $this->$fields ) {
+            //TODO
             $fields             = [];
         }
 
