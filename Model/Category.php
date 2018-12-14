@@ -22,35 +22,65 @@ use OxidEsales\Eshop\Core\DatabaseProvider;
 class Category extends BaseModel
 {
     /**
-     * @var null
+     * Categories list.
+     *
+     * @var array
      */
     protected $_aCategories = null;
 
     /**
+     * Category class construcotor.
+     */
+    public function __construct()
+    {
+        $this->getCategories();
+    }
+
+    /**
+     * get Categories from the DB
      * @return array|null
+     *
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
      */
     public function getCategories()
     {
-        if( $this->_aCategories == null ) {
-
+        if ($this->_aCategories == null) {
             $oDB = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC);
 
             $sCategoriesView = getViewName('oxcategories');
             $aCategories = $oDB->getAll("SELECT `OXID` AS id,  `OXTITLE` AS title, `OXPARENTID` AS parent FROM `{$sCategoriesView}` WHERE `OXACTIVE` = 1");
 
-            //TODO convert to an object in order to use the id as key
-            $this->_aCategories = $aCategories;
+            $this->_aCategories = $this->_buildCategories($aCategories);
         }
 
         return $this->_aCategories;
-
     }
 
     /**
+     * Build categoies with the OXID as key.
+     *
+     * @param array $aCategories
+     * @param array $aData
+     * @param int   $iLevel
+     */
+    protected function _buildCategories($aCategories, &$aData = array(), $iLevel = 0)
+    {
+        if ($aCategories) {
+            foreach ($aCategories as $aCategory) {
+                $aData[$aCategory['id']] = $aCategory;
+            }
+            asort($aData);
+        }
+
+        return $aData;
+    }
+
+    /**
+     * Find a category by id.
      * @param $id
-     * @return |null
+     *
+     * @return array|null
      */
     public function findCategory($id)
     {
@@ -58,17 +88,17 @@ class Category extends BaseModel
     }
 
     /**
-     * @param $limit
-     * @param null $afterId
-     * @return array
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     * Find categories.
+     *
+     * @param int $limit
+     * @param string $afterId
+     *
+     * @return array|null
      */
     public function findCategories($limit, $afterId = null)
     {
-        $this->getCategories();
-
         $start = $afterId ? (int) array_search($afterId, array_keys($this->_aCategories)) + 1 : 0;
+
         return array_slice(array_values($this->_aCategories), $start, $limit);
     }
 }

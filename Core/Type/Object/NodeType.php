@@ -47,7 +47,6 @@ class NodeType extends InterfaceType
 
     /**
      * @param $object
-     * @return UserType
      */
     public function resolveNodeType($object)
     {
