@@ -21,6 +21,7 @@ use OxidProfessionalServices\GraphQl\Core\Type\Enum\ImageSizeEnumType;
 use OxidProfessionalServices\GraphQl\Core\Type\Field\HtmlFieldType;
 use OxidProfessionalServices\GraphQl\Core\Type\Scalar\EmailType;
 use OxidProfessionalServices\GraphQl\Core\Type\Scalar\UrlType;
+use OxidProfessionalServices\GraphQl\Core\Type\Object\ArticleType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\CategoryType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\NodeType;
 
@@ -55,6 +56,12 @@ class Types
      */
     private static $rootMutation;
 
+    /**
+     * Stores the article type object
+     *
+     * @var
+     */
+    private static $article;
 
     /**
      * Stores the category type object
@@ -115,6 +122,18 @@ class Types
     public static function rootMutation()
     {
         return self::$rootMutation ?: (self::$rootMutation = new RootMutationType());
+    }
+
+
+    // Object Types
+    /**
+     * Returns the definition for the ArticleType
+     *
+     * @return ArticleType
+     */
+    public static function article()
+    {
+        return self::$article ?: (self::$article = new ArticleType());
     }
 
 
