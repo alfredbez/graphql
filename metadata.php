@@ -54,13 +54,29 @@ $aModule = [
         'graphiql.tpl'    =>  'oxps/graphql/out/js/graphiql.tpl',
     ],
     'blocks'      => [
+        [
+            'template' => 'module_config.tpl',
+            'block'    => 'admin_module_config_var_types',
+            'file'     => 'views/admin/blocks/admin_module_config_button_type.tpl',
+        ],
+        [
+            'template' => 'module_config.tpl',
+            'block'    => 'admin_module_config_group_class',
+            'file'     => 'views/admin/blocks/admin_module_config_group_expand.tpl',
+        ],
     ],
     'settings'    => [
         [
-            'group' =>  'main',
-            'name'  =>  'strGraphQLName',
-            'type'  =>  'str',
-            'value' =>  'GraphQL Value'
+            'group' =>  'create',
+            'name'  =>  'btnGraphQLApiKey',
+            'type'  =>  'btn',
+            'value' =>  'Create Api Key'
+        ],
+        [
+            'group' =>  'create',
+            'name'  =>  'btnGraphQLApiSecret',
+            'type'  =>  'btn',
+            'value' =>  'Create Api Secret'
         ],
     ],
     'events'      => [

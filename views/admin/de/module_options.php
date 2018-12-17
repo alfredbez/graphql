@@ -20,5 +20,6 @@ $aLang = [
     'charset'                           => 'UTF-8',
 
     'SHOP_MODULE_GROUP_main'            => 'Main',
-    'SHOP_MODULE_strGraphQLName'        => 'Einstellungen für GraphQL-Modul',
+    'SHOP_MODULE_GROUP_create'          => 'Create Credentials',
+    'SHOP_MODULE_btnGraphQLApiKey'      => 'Generate an API Key',
 ];
