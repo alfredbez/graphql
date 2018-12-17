@@ -56,6 +56,8 @@ class NodeType extends InterfaceType
             return Types::image();
         } else if ($object instanceof Article) {
             return Types::article();
+        } else if ($object instanceof CAtegory) {
+            return Types::category();
         }
 
     }

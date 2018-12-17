@@ -14,7 +14,7 @@
  * @version     OXID eSales GraphQL
  */
 
-use \OxidEsales\Eshop\Application\Controller\FrontendController;
+use \OxidEsales\Eshop\Application\Component\Widget\WidgetController;
 
 
 /**
@@ -42,11 +42,12 @@ $aModule = [
     'url'         => 'www.oxid-esales.com',
     'email'       => 'ps@oxid-esales.com',
     'extend'      => [
-        FrontendController::class => OxidProfessionalServices\GraphQl\Controller\GraphQL::class,
     ],
     'controllers' => [
         // Admin Controller
         'graphiql'      => OxidProfessionalServices\GraphQl\Controller\Admin\GraphiQL::class,
+        // Widget Controller
+        'graphql'       => OxidProfessionalServices\GraphQl\Component\Widget\GraphQL::class,
     ],
     'templates'   => [
         //Admin

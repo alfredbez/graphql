@@ -17,6 +17,7 @@
 namespace OxidProfessionalServices\GraphQl\Core\Type;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
+use OxidProfessionalServices\GraphQl\Model\Article;
 use OxidProfessionalServices\GraphQl\Model\Category;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -63,9 +64,27 @@ class RootQueryType extends ObjectType
     public function fields()
     {
         $fields = [
+            'article' => [
+                'type' => Types::article(),
+                'description' => 'Returns an article by id',
+                'args' => [
+                    'id' => Types::nonNull(Types::id()),
+                ],
+            ],
+            'articles' => [
+                'type' => Types::listOf(Types::article()),
+                'description' => 'Returns list of articles',
+                'args' => [
+                    'limit' => [
+                        'type' => Types::int(),
+                        'description' => 'Number of articles to be returned',
+                        'defaultValue' => 20,
+                    ],
+                ],
+            ],
             'category' => [
                 'type' => Types::category(),
-                'description' => 'Returns category by id',
+                'description' => 'Returns a category by id',
                 'args' => [
                     'id' => Types::nonNull(Types::id()),
                 ],
@@ -91,6 +110,21 @@ class RootQueryType extends ObjectType
         ksort($fields);
 
         return $fields;
+    }
+
+    public function article($rootValue, $args)
+    {
+        $oCategory = oxNew(Article::class);
+
+        return $oArticle->findArticle($args['id']);
+    }
+
+    public function articles($rootValue, $args)
+    {
+        $oArticle = oxNew(Article::class);
+        $args += ['after' => null];
+
+        return $oArticle->findArticles($args['limit'], $args['after']);
     }
 
     public function category($rootValue, $args)

@@ -14,15 +14,12 @@
  * @version     OXID eSales GraphQL
  */
 
-namespace OxidProfessionalServices\GraphQl\Controller;
+namespace OxidProfessionalServices\GraphQl\Component\Widget;
 
 use OxidEsales\Eshop\Core\Registry;
-
 use OxidProfessionalServices\GraphQl\Core\Types;
 use OxidProfessionalServices\GraphQl\Core\AppContext;
-
 use GraphQL\Type\Schema;
-
 use \GraphQL\Error\FormattedError;
 use \GraphQL\Error\Debug;
 
@@ -30,9 +27,9 @@ use \GraphQL\Error\Debug;
 /**
  * Class GraphQL graphql-php wrapper.
  *
- * @mixin \OxidEsales\Eshop\Application\Controller\FrontendController
+ * @mixin \OxidEsales\Eshop\Application\Component\Widget\WidgetController
  */
-class GraphQL extends \OxidEsales\Eshop\Application\Controller\FrontendController
+class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetController
 {
     /**
      * Holds the Schema def

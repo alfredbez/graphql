@@ -16,6 +16,9 @@
 
 namespace OxidProfessionalServices\GraphQL\Core;
 
+use OxidEsales\Eshop\Core\DatabaseProvider;
+use OxidEsales\Eshop\Core\DbMetaDataHandler;
+
 /**
  * Class defines what module does on Shop events.
  */
@@ -26,7 +29,18 @@ class Events
      */
     public static function onActivate()
     {
-        // TODO: Implement onActivate() method
+        $dbMetaDataHandler = oxNew(DbMetaDataHandler::class);
+        $oxDb = DatabaseProvider::getDb();
+
+        $bUpdateViews = false;
+        $sql = "REPLACE INTO `oxseo` (`OXOBJECTID`, `OXIDENT`, `OXSHOPID`, `OXLANG`, `OXSTDURL`, `OXSEOURL`, `OXTYPE`, `OXFIXED`, `OXEXPIRED`, `OXPARAMS`, `OXTIMESTAMP`)
+                VALUES ('c28b890370ed6c8ce7ac89968a904577', 'bb307611d3f88a265136160fd3f949c4', 1, 0, 'widget.php?cl=graphql', 'graphql/', 'static', 0, 0, '', '2018-12-17 12:00:00')";
+        $oxDb->execute($sql);
+        $bUpdateViews = true;
+
+        if ($bUpdateViews) {
+            $dbMetaDataHandler->updateViews();
+        }
     }
 
     /**
@@ -34,6 +48,16 @@ class Events
      */
     public static function onDeactivate()
     {
-        // TODO: Implement onDeactivate() method
+        $dbMetaDataHandler = oxNew(DbMetaDataHandler::class);
+        $oxDb = DatabaseProvider::getDb();
+
+        $bUpdateViews = false;
+        $sql = "DELETE FROM `oxseo` WHERE `OXIDENT` = 'bb307611d3f88a265136160fd3f949c4' AND `OXSHOPID` = 1 AND `OXLANG` = 0";
+        $oxDb->execute($sql);
+        $bUpdateViews = true;
+
+        if ($bUpdateViews) {
+            $dbMetaDataHandler->updateViews();
+        }
     }
 }
