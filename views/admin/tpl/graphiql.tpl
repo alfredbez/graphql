@@ -1,3 +1,4 @@
+[{assign var="oConfig" value=$oView->getConfig()}]
 <head>
     <title>OXID GraphQL</title>
     <style>
@@ -14,7 +15,7 @@
 
     <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <script src="[{$oViewConf->getModuleUrl('oxps/graphql','out/src/js/graphiql.min.js')}]"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/theme/solarized.css" />
@@ -88,6 +89,7 @@
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'Authorization': 'Bearer [{$oConfig->getConfigParam("strGraphQLApiSecret")}]'
             },
             body: JSON.stringify(graphQLParams),
             credentials: 'include',
