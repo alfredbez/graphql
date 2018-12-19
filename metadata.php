@@ -52,7 +52,7 @@ $aModule = [
     ],
     'templates'   => [
         //Admin
-        'graphiql.tpl'    =>  'oxps/graphql/out/js/graphiql.tpl',
+        'graphiql.tpl'    =>  'oxps/graphql/views/admin/tpl/graphiql.tpl',
     ],
     'blocks'      => [
         [
