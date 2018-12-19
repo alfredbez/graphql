@@ -17,9 +17,16 @@
 $sLangName = 'Deutsch';
 
 $aLang = [
-    'charset'                           => 'UTF-8',
+    'charset'                               => 'UTF-8',
 
-    'SHOP_MODULE_GROUP_main'            => 'Main',
-    'SHOP_MODULE_GROUP_create'          => 'Create Credentials',
-    'SHOP_MODULE_btnGraphQLApiKey'      => 'Generate an API Key',
+    'SHOP_MODULE_GROUP_credentials'         => 'Entwickleranmeldeinformationen',
+    'SHOP_MODULE_strGraphQLApiKey'          => 'API Key',
+    'HELP_SHOP_MODULE_strGraphQLApiKey'     => 'Generieren Sie den Entwickler GraphQL-API-Schlüssel zur Verwendung mit diesem Shop',
+    'SHOP_MODULE_strGraphQLApiSecret'       => 'API Secret',
+    'HELP_SHOP_MODULE_strGraphQLApiSecret'  => 'Generieren Sie den Entwickler GraphQL-API-Geheimnis zur Verwendung mit diesem Shop',
+
+    'MODULE_GENERATE'                       => 'Generieren',
+    'MODULE_REGENERATE'                     => 'Regenerieren',
+    'MODULE_HIDE'                           => 'API Secret ausblenden',
+    'MODULE_SHOW'                           => 'API Secret anzeigent',
 ];
