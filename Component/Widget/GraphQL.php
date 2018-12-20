@@ -64,7 +64,7 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
             /**
              * Parse incoming query and variables
              */
-            $aData = $this->initGraphQlRequest();
+            $aData = $this->getGraphQlRequest();
 
             /**
              * GraphQL schema to be passed to query executor:
@@ -108,8 +108,8 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
              * root_Query and root_mutation
              */
             $aExecutableSchema = [
-                'query'    => $oTypes->rootQuery(),
-                'mutation' => $oTypes->rootMutation(),
+                'query'    => $oTypes->query(),
+                'mutation' => $oTypes->mutation(),
             ];
 
             /**
@@ -155,7 +155,7 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
     /**
      * @return array
      */
-    private function initGraphQlRequest()
+    private function getGraphQlRequest()
     {
         if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
             $sRaw = file_get_contents('php://input') ?: '';

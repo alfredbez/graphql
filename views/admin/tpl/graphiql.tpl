@@ -82,26 +82,24 @@
         // use fetch, and could instead implement graphQLFetcher however you like,
         // as long as it returns a Promise or Observable.
         function graphQLFetcher(graphQLParams) {
-        // This example expects a GraphQL server at the path /graphql.
-        // Change this to point wherever you host your GraphQL server.
-        return fetch(`${window.location.origin}/graphql/`, {
-            method: 'post',
-            headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer [{$oConfig->getConfigParam("strGraphQLApiSecret")}]'
-            },
-            body: JSON.stringify(graphQLParams),
-            credentials: 'include',
-        }).then(function (response) {
-            return response.text();
-        }).then(function (responseBody) {
-            try {
-            return JSON.parse(responseBody);
-            } catch (error) {
-            return responseBody;
-            }
-        });
+            return fetch(`${window.location.origin}/graphql/`, {
+                method: 'post',
+                headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer [{$oConfig->getConfigParam("strGraphQLApiSecret")}]'
+                },
+                body: JSON.stringify(graphQLParams),
+                credentials: 'include',
+            }).then(function (response) {
+                return response.text();
+            }).then(function (responseBody) {
+                try {
+                return JSON.parse(responseBody);
+                } catch (error) {
+                return responseBody;
+                }
+            });
         }
 
     ReactDOM.render(

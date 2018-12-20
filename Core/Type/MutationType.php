@@ -24,10 +24,10 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
- * Class RootMutationType
- * The RootMutationType is the primary entry point for Mutations in the GraphQL Schema
+ * Class MutationType
+ * The MutationType is the primary entry point for Mutations in the GraphQL Schema
  */
-class RootMutationType extends ObjectType
+class MutationType extends ObjectType
 {
     /**
      * Type name
@@ -44,7 +44,7 @@ class RootMutationType extends ObjectType
     private $fields;
 
     /**
-     * RootMutationType constructor.
+     * MutationType constructor.
      */
     public function __construct()
     {

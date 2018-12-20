@@ -23,10 +23,10 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
- * Class RootQueryType
- * The RootQueryType is the primary entry for Queries in the GraphQL Schema.
+ * Class QueryType
+ * The QueryType is the primary entry for Queries in the GraphQL Schema.
  */
-class RootQueryType extends ObjectType
+class QueryType extends ObjectType
 {
     /**
      * Type name.
@@ -36,7 +36,7 @@ class RootQueryType extends ObjectType
     private $typeName = 'rootQuery';
 
     /**
-     * RootQueryType constructor.
+     * QueryType constructor.
      */
     public function __construct()
     {

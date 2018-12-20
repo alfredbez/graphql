@@ -25,8 +25,9 @@ use OxidProfessionalServices\GraphQl\Core\Type\Object\ArticleType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\CategoryType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\NodeType;
 
-use OxidProfessionalServices\GraphQl\Core\Type\RootQueryType;
-use OxidProfessionalServices\GraphQl\Core\Type\RootMutationType;
+use OxidProfessionalServices\GraphQl\Core\Type\QueryType;
+use OxidProfessionalServices\GraphQl\Core\Type\MutationType;
+use OxidProfessionalServices\GraphQl\Core\Type\SubscriptionType;
 
 use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\NonNull;
@@ -45,16 +46,23 @@ class Types
     /**
      * Stores the root query type object
      *
-     * @var RootQueryType object $rootQuery
+     * @var QueryType object $query
      */
-    private static $rootQuery;
+    private static $query;
 
     /**
      * Stores the root mutation type object
      *
-     * @var RootQueryType object $rootMutation
+     * @var MutationType object $mutation
      */
-    private static $rootMutation;
+    private static $mutation;
+
+    /**
+     * Stores the root subscription type object
+     *
+     * @var SubscriptionType object $mutation
+     */
+    private static $subscription;
 
     /**
      * Stores the article type object
@@ -107,23 +115,31 @@ class Types
 
 
     /**
-     * Returns the definition for the RootQueryType
-     * @return RootQueryType
+     * Returns the definition for the QueryType
+     * @return QueryType
      */
-    public static function rootQuery()
+    public static function query()
     {
-        return self::$rootQuery ?: (self::$rootQuery = new RootQueryType());
+        return self::$query ?: (self::$query = new QueryType());
     }
 
     /**
-     * Returns the definition for the RootQueryType
-     * @return RootMutationType
+     * Returns the definition for the QueryType
+     * @return MutationType
      */
-    public static function rootMutation()
+    public static function mutation()
     {
-        return self::$rootMutation ?: (self::$rootMutation = new RootMutationType());
+        return self::$mutation ?: (self::$mutation = new MutationType());
     }
 
+    /**
+     * Returns the definition for the QueryType
+     * @return SubscriptionType
+     */
+    public static function subscription()
+    {
+        return self::$subscription ?: (self::$subscription = new SubscriptionType());
+    }
 
     // Object Types
     /**
