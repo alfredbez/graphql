@@ -21,8 +21,8 @@ use OxidProfessionalServices\GraphQl\Core\AppContext;
 use OxidProfessionalServices\GraphQl\Core\Auth;
 use OxidProfessionalServices\GraphQl\Core\Types;
 use GraphQL\Type\Schema;
-use \GraphQL\Error\FormattedError;
-use \GraphQL\Error\Debug;
+use GraphQL\Error\FormattedError;
+use GraphQL\Error\Debug;
 
 
 /**

@@ -63,7 +63,7 @@ class GraphiQL extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDetai
         $sTokenId = $oConfig->getConfigParam('strGraphQLApiKey');
         $dtIssuedAt = time();
         $dtNotBefore = $dtIssuedAt + 10; //Adding 10 seconds
-        $dtExpire = $dtNotBefore + strtotime('1 hour'); // Adding 1 year
+        $dtExpire = strtotime('1 hour'); // Adding 1 year
         $sServerName = $oConfig->getShopUrl(); // Retrieve the server name from config file
 
         /*
@@ -73,8 +73,9 @@ class GraphiQL extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDetai
             'iat'  => $dtIssuedAt,          // Issued at: time when the token was generated
             'jti'  => $sTokenId,            // Json Token Id: an unique identifier for the token
             'iss'  => $sServerName,         // Issuer
+            'aud'  => $sServerName,         // Issuer
             //'nbf'  => $dtNotBefore,         // Not before
-            //'exp'  => $dtExpire,            // Expire
+            'exp'  => $dtExpire,            // Expire
             'data' => $aData,               // Data related to the signer user
         ];
 

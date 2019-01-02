@@ -64,7 +64,7 @@ class CategoryType extends ObjectType
      */
     public function resolveParent($category)
     {
-        if ($category['parent']) {
+        if ($category['parent'] && $category['parent'] !== 'oxrootid') {
             $oCategory = oxNew(Category::class);
 
             return $oCategory->findCategory($category['parent']);
