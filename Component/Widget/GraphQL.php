@@ -17,44 +17,42 @@
 namespace OxidProfessionalServices\GraphQl\Component\Widget;
 
 use OxidEsales\Eshop\Core\Registry;
-use OxidProfessionalServices\GraphQl\Core\Types;
 use OxidProfessionalServices\GraphQl\Core\AppContext;
+use OxidProfessionalServices\GraphQl\Core\Auth;
+use OxidProfessionalServices\GraphQl\Core\Types;
 use GraphQL\Type\Schema;
 use \GraphQL\Error\FormattedError;
 use \GraphQL\Error\Debug;
 
 
 /**
- * Class GraphQL graphql-php wrapper.
+ * Class GraphQL graphql-php wrapper
  *
  * @mixin \OxidEsales\Eshop\Application\Component\Widget\WidgetController
  */
 class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetController
 {
     /**
-     * Holds the Schema def
+     * The GraphQL Schema definition
+     *
      * @var \GraphQL\Type\Schema
      */
-    protected $schema;
+    protected $_oSchema;
 
     /**
-     * GraphQL constructor.
+     * The Context fron the GraphQL App
+     *
+     * @var \OxidProfessionalServices\GraphQl\Core\AppContext
+     */
+    protected $_oAppContext;
+
+    /**
+     * GraphQL constructor
+     *
      * @throws \Throwable
      */
     public function __construct()
     {
-        /**
-         * Disable default PHP error reporting - we have better one for debug mode (see bellow)
-         */
-        ini_set('display_errors', 0);
-        $debug = false;
-        if (!empty($_GET['debug'])) {
-            set_error_handler(function($severity, $message, $file, $line) use (&$phpErrors) {
-                throw new ErrorException($message, 0, $severity, $file, $line);
-            });
-            $debug = Debug::INCLUDE_DEBUG_MESSAGE | Debug::INCLUDE_TRACE;
-        }
-
         try {
             /**
              * Prepare context that will be available in all field resolvers (as 3rd argument)
@@ -64,7 +62,7 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
             /**
              * Parse incoming query and variables
              */
-            $aData = $this->getGraphQlRequest();
+            $aData = $this->getGraphQLRequest();
 
             /**
              * GraphQL schema to be passed to query executor:
@@ -80,14 +78,14 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
                 $aData['query'],
                 null,
                 $oAppContext,
-                (array)$aData['variables']
+                $aData['variables']
             );
 
             $aOutput = $oResult->toArray($debug);
 
         } catch (\Exception $error) {
             $aOutput['errors'] = [
-                FormattedError::createFromException($error, $debug)
+                FormattedError::createFromException($error, true)
             ];
         }
 
@@ -95,67 +93,57 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
     }
 
     /**
-     * Returns the Schema as defined by static registrations throughout
-     * the WP Load.
+     * Get the AppContext for use in passing down the Resolve Tree
+     *
+     * @return \OxidProfessionalServices\GraphQl\Core\AppContext
+     */
+    private function getAppContext()
+    {
+        $oAuth = oxNew(Auth::class);
+        $aContext = $oAuth->authorize();
+
+        $this->_oAppContext = oxNew(AppContext::class);
+        $this->_oAppContext->viewer = $aContext->data->id;
+        $this->_oAppContext->rootUrl = $aContext->iss;
+        $this->_oAppContext->request = !empty( $_REQUEST ) ? $_REQUEST : null;
+
+        return $this->_oAppContext;
+    }
+
+    /**
+     * Returns the Schema as defined by static registrations
+     *
+     * @return GraphQL\Type\Schema
      */
     public  function getSchema()
     {
-        if ( null === $this->schema ) {
+        if ( null === $this->_oSchema ) {
             $oTypes = oxNew(Types::class);
 
             /**
              * Create an executable Schema from the registered
-             * root_Query and root_mutation
+             * query, mutation and subscription
              */
             $aExecutableSchema = [
-                'query'    => $oTypes->query(),
-                'mutation' => $oTypes->mutation(),
+                'query'         => $oTypes->query(),
+                'mutation'      => $oTypes->mutation(),
             ];
 
             /**
              * Generate the Schema
              */
-            $this->schema = oxNew(Schema::class, $aExecutableSchema);
+            $this->_oSchema = oxNew(Schema::class, $aExecutableSchema);
         }
 
-        return $this->schema;
+        return $this->_oSchema;
     }
 
     /**
-     * @param $aResult
-     */
-    protected function renderJsonResponse($aResult)
-    {
-        /**
-         * Force json content type by oxid framework
-         */
-        $_GET['renderPartial'] = 1;
-
-        $oUtils = Registry::getUtils();
-        $oUtils->setHeader('Content-Type: application/json');
-        $oUtils->showMessageAndExit(json_encode($aResult));
-
-    }
-
-    /**
-     * Get the AppContext for use in passing down the Resolve Tree
-     * @return object|AppContext
-     */
-    private function getAppContext()
-    {
-        $oConfig = $this->getConfig();
-
-        $oAppContext = oxNew(AppContext::class);
-        $oAppContext->viewer = $this->getUser();
-        $oAppContext->rootUrl = $oConfig->getShopUrl();
-        $oAppContext->request = !empty( $_REQUEST ) ? $_REQUEST : null;
-        return $oAppContext;
-    }
-
-    /**
+     * Get the Request data
+     *
      * @return array
      */
-    private function getGraphQlRequest()
+    private function getGraphQLRequest()
     {
         if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
             $sRaw = file_get_contents('php://input') ?: '';
@@ -172,4 +160,21 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
         return $aData;
     }
 
+    /**
+     * Return a JSON Object with the graphql results
+     *
+     * @param $aResult
+     */
+    protected function renderJsonResponse($aResult)
+    {
+        /**
+         * Force json content type by oxid framework
+         */
+        $_GET['renderPartial'] = 1;
+
+        $oUtils = Registry::getUtils();
+        $oUtils->setHeader('Content-Type: application/json');
+        $oUtils->showMessageAndExit(json_encode($aResult));
+
+    }
 }

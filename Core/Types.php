@@ -21,6 +21,7 @@ use OxidProfessionalServices\GraphQl\Core\Type\Enum\ImageSizeEnumType;
 use OxidProfessionalServices\GraphQl\Core\Type\Field\HtmlFieldType;
 use OxidProfessionalServices\GraphQl\Core\Type\Scalar\EmailType;
 use OxidProfessionalServices\GraphQl\Core\Type\Scalar\UrlType;
+use OxidProfessionalServices\GraphQl\Core\Type\Object\UserType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\ArticleType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\CategoryType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\NodeType;
@@ -43,80 +44,76 @@ use GraphQL\Type\Definition\Type;
  */
 class Types
 {
+    // Object Types
     /**
      * Stores the root query type object
      *
-     * @var QueryType object $query
      */
     private static $query;
 
     /**
      * Stores the root mutation type object
      *
-     * @var MutationType object $mutation
      */
     private static $mutation;
 
     /**
-     * Stores the root subscription type object
+     * Stores the user type object
      *
-     * @var SubscriptionType object $mutation
      */
-    private static $subscription;
+    private static $user;
 
     /**
      * Stores the article type object
      *
-     * @var
      */
     private static $article;
 
     /**
      * Stores the category type object
      *
-     * @var
      */
     private static $category;
 
+
+    // Interface types
     /**
      * Stores the node type object
      *
-     * @var
      */
     private static $node;
 
+    // Enum types
     /**
      * Stores the image size enum type object
      *
-     * @var
      */
     private static $imageSizeEnum;
 
     /**
      * Stores the content format enum type object
      *
-     * @var
      */
     private static $contentFormatEnum;
 
     /**
      * Stores the url type object
      *
-     * @var
      */
     private static $urlType;
 
+    // Scalar types
     /**
      * Stores the email type object
      *
-     * @var
      */
     private static $emailType;
 
 
     /**
      * Returns the definition for the QueryType
-     * @return QueryType
+     *
+     * @return \OxidProfessionalServices\GraphQl\Core\Type\QueryType
      */
     public static function query()
     {
@@ -125,7 +122,7 @@ class Types
 
     /**
      * Returns the definition for the QueryType
-     * @return MutationType
+     * @return \OxidProfessionalServices\GraphQl\Core\Type\MutationType
      */
     public static function mutation()
     {
@@ -133,54 +130,47 @@ class Types
     }
 
     /**
-     * Returns the definition for the QueryType
-     * @return SubscriptionType
+     * @return \OxidProfessionalServices\GraphQl\Core\Type\Object\UserType
      */
-    public static function subscription()
+    public static function user()
     {
-        return self::$subscription ?: (self::$subscription = new SubscriptionType());
+        return self::$user ?: (self::$user = new UserType());
     }
 
-    // Object Types
     /**
      * Returns the definition for the ArticleType
      *
-     * @return ArticleType
+     * @return \OxidProfessionalServices\GraphQl\Core\Type\Object\ArticleType
      */
     public static function article()
     {
         return self::$article ?: (self::$article = new ArticleType());
     }
 
-
-    // Object Types
     /**
      * Returns the definition for the CategoryType
      *
-     * @return CategoryType
+     * @return \OxidProfessionalServices\GraphQl\Core\Type\Object\CategoryType
      */
     public static function category()
     {
         return self::$category ?: (self::$category = new CategoryType());
     }
 
-
-    // Interface types
     /**
      * Returns the definition for the NodeType
      *
-     * @return NodeType
+     * @return \OxidProfessionalServices\GraphQl\Core\Type\Object\NodeType
      */
     public static function node()
     {
         return self::$node ?: (self::$node = new NodeType());
     }
 
-    // Enum types
     /**
      * Returns the definition for the ImageSizeEnumType
      *
-     * @return ImageSizeEnumType
+     * @return \OxidProfessionalServices\GraphQl\Core\Type\Enum\ImageSizeEnumType
      */
     public static function imageSizeEnum()
     {
@@ -190,18 +180,17 @@ class Types
     /**
      * Returns the definition for the ContentFormatEnumType
      *
-     * @return ContentFormatEnumType
+     * @return \OxidProfessionalServices\GraphQl\Core\Type\Enum\ContentFormatEnumType
      */
     public static function contentFormatEnum()
     {
         return self::$contentFormatEnum ?: (self::$contentFormatEnum = new ContentFormatEnumType());
     }
 
-    // Scalar types
     /**
      * Returns the definition for the email
      *
-     * @return \GraphQL\Type\Definition\CustomScalarType
+     * @return \OxidProfessionalServices\GraphQl\Core\Type\Scalar\EmailType
      */
     public static function email()
     {
@@ -211,7 +200,7 @@ class Types
     /**
      * Returns the definition for the url
      *
-     * @return UrlType
+     * @return \OxidProfessionalServices\GraphQl\Core\Type\Scalar\UrlType
      */
     public static function url()
     {
@@ -223,13 +212,12 @@ class Types
      *
      * @param $name
      * @param null $objectKey
-     * @return array
+     * @return \OxidProfessionalServices\GraphQl\Core\Type\Field\HtmlFieldType
      */
     public static function htmlField($name, $objectKey = null)
     {
         return HtmlFieldType::build($name, $objectKey);
     }
-
 
     /**
      * This is a wrapper for the GraphQL type to give a consistent experience
@@ -284,8 +272,8 @@ class Types
     /**
      * This is a wrapper for the GraphQL type to give a consistent experience
      *
-     * @param Type $type
-     * @return ListOfType
+     * @param \GraphQL\Type\Definition\Type|\GraphQL\Type\DefinitionContainer $type
+     * @return \GraphQL\Type\Definition\ListOfType
      */
     public static function listOf($type)
     {
@@ -295,9 +283,8 @@ class Types
     /**
      * This is a wrapper for the GraphQL type to give a consistent experience
      *
-     * @param $type
-     * @return NonNull
-     * @throws \Exception
+     * @param \GraphQL\Type\Definition\Type|\GraphQL\Type\DefinitionContainer $type
+     * @return \GraphQL\Type\Definition\NonNull
      */
     public static function nonNull($type)
     {
