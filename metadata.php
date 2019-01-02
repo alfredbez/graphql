@@ -42,7 +42,7 @@ $aModule = [
     'url'         => 'www.oxid-esales.com',
     'email'       => 'ps@oxid-esales.com',
     'extend'      => [
-        ModuleConfiguration::class      => OxidProfessionalServices\GraphQl\Controller\Admin\GraphQLConfiguration::class,
+        ModuleConfiguration::class      => OxidProfessionalServices\GraphQl\Controller\Admin\GraphQLConfig::class,
     ],
     'controllers' => [
         // Admin Controller
@@ -51,7 +51,7 @@ $aModule = [
         'graphql'       => OxidProfessionalServices\GraphQl\Component\Widget\GraphQL::class,
     ],
     'templates'   => [
-        //Admin
+        //Admin Template
         'graphiql.tpl'    =>  'oxps/graphql/views/admin/tpl/graphiql.tpl',
     ],
     'blocks'      => [

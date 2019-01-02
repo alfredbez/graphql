@@ -34,26 +34,26 @@ class MutationType extends ObjectType
      *
      * @var string $type_name
      */
-    private $typeName = 'rootMutation';
+    private $typeName = 'Mutation';
 
     /**
-     * Holds the $fields definition.
+     * Holds the $fields definition
      *
      * @var $fields
      */
     private $fields;
 
     /**
-     * MutationType constructor.
+     * MutationType constructor
      */
     public function __construct()
     {
         /**
-         * Configure the RootMutation
+         * Configure Mutation Type
          */
         $config = [
             'name'          => $this->$typeName,
-            'description'   => 'Root mutation',
+            'description'   => 'Primary entry point for Mutations in the GraphQL Schema',
             'fields'        => $this->fields(),
             'resolveField'  => function($val, $args, $context, ResolveInfo $info) {
                 return $this->{$info->fieldName}($val, $args, $context, $info);
@@ -67,7 +67,7 @@ class MutationType extends ObjectType
     }
 
     /**
-     * Setup data fields.
+     * Setup data fields
      */
     public function fields()
     {

@@ -1,6 +1,8 @@
 [{assign var="oConfig" value=$oView->getConfig()}]
 <head>
     <title>OXID GraphQL</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=[{oxmultilang ident='charset'}]">
+
     <style>
         body {
         height: 100%;
@@ -87,7 +89,7 @@
                 headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer [{$oConfig->getConfigParam("strGraphQLApiSecret")}]'
+                'Authorization': 'Bearer [{$sBearer}]'
                 },
                 body: JSON.stringify(graphQLParams),
                 credentials: 'include',

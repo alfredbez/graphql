@@ -20,7 +20,7 @@ use OxidEsales\Eshop\Core\Module\ModuleVariablesLocator;
 /**
  *
  */
-class GraphQLConfiguration extends \OxidEsales\Eshop\Application\Controller\Admin\ModuleConfiguration
+class GraphQLConfig extends \OxidEsales\Eshop\Application\Controller\Admin\ModuleConfiguration
 {
 
     /**
@@ -45,23 +45,25 @@ class GraphQLConfiguration extends \OxidEsales\Eshop\Application\Controller\Admi
     }
 
     /**
-     * Generate a GraphQL ApiKey for this shop
+     * Generate a GraphQL ApiKey,
+     * This a unique string, could be used to validate a token
      *
      */
     public function generateApiKey()
     {
-        $sToken = base64_encode(random_bytes(16));
+        $sToken = base64_encode(openssl_random_pseudo_bytes(16));
         $_POST['confstrs']['strGraphQLApiKey'] = $sToken;
         $this->saveConfVars();
     }
 
     /**
-     * Generate a GraphQL ApiSecret for this shop
-     *
+     * Generate a GraphQL extract ApiSecret,
+     * keep it secure! You'll need the exact key to verify the
+     * token later.
      */
     public function generateApiSecret()
     {
-        $sToken = bin2hex(random_bytes(24));
+        $sToken = base64_encode(openssl_random_pseudo_bytes(64));
         $_POST['confstrs']['strGraphQLApiSecret'] = $sToken;
         $this->saveConfVars();
     }
