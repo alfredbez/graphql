@@ -17,8 +17,16 @@
 $sLangName = 'English';
 
 $aLang = [
-    'charset'                           => 'UTF-8',
+    'charset'                               => 'UTF-8',
 
-    'SHOP_MODULE_GROUP_main'            => 'Main',
-    'SHOP_MODULE_strGraphQLName'        => 'Settings for GraphQL module',
+    'SHOP_MODULE_GROUP_credentials'         => 'Developer Credentials',
+    'SHOP_MODULE_strGraphQLApiKey'          => 'API Key',
+    'HELP_SHOP_MODULE_strGraphQLApiKey'     => 'Generate Developer GraphQL API Key to use with this Shop',
+    'SHOP_MODULE_strGraphQLApiSecret'       => 'API Secret',
+    'HELP_SHOP_MODULE_strGraphQLApiSecret'  => 'Generate Developer GraphQL API Secret to use with this Shop',
+
+    'MODULE_GENERATE'                       => 'Generate',
+    'MODULE_REGENERATE'                     => 'Regenerate',
+    'MODULE_HIDE'                           => 'Hide API Secret',
+    'MODULE_SHOW'                           => 'Show API Secret',
 ];

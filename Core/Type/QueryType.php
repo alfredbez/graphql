@@ -17,35 +17,38 @@
 namespace OxidProfessionalServices\GraphQl\Core\Type;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
+use OxidProfessionalServices\GraphQl\Model\User;
 use OxidProfessionalServices\GraphQl\Model\Article;
 use OxidProfessionalServices\GraphQl\Model\Category;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
- * Class RootQueryType
- * The RootQueryType is the primary entry for Queries in the GraphQL Schema.
+ * Class QueryType
+ * The QueryType is the primary entry for Queries in the GraphQL Schema
+ *
+
  */
-class RootQueryType extends ObjectType
+class QueryType extends ObjectType
 {
     /**
      * Type name.
      *
      * @var string
      */
-    private $typeName = 'rootQuery';
+    private $typeName = 'Query';
 
     /**
-     * RootQueryType constructor.
+     * QueryType constructor
      */
     public function __construct()
     {
         /**
-         * Configure the RootQuery.
+         * Configure Query Type
          */
         $config = [
             'name' => $this->$typeName,
-            'description' => 'Root query',
+            'description' => 'Primary entry for Queries in the GraphQL Schema.',
             'fields' => $this->fields(),
             'resolveField' => function ($val, $args, $context, ResolveInfo $info) {
                 return $this->{$info->fieldName}($val, $args, $context, $info);
@@ -59,11 +62,22 @@ class RootQueryType extends ObjectType
     }
 
     /**
-     * Setup data fields.
+     * Setup data fields
      */
     public function fields()
     {
         $fields = [
+            'user' => [
+                'type' => Types::user(),
+                'description' => 'Returns user by id',
+                'args' => [
+                    'id' => Types::nonNull(Types::id())
+                ]
+            ],
+            'viewer' => [
+                'type' => Types::user(),
+                'description' => 'Represents currently logged-in user'
+            ],
             'article' => [
                 'type' => Types::article(),
                 'description' => 'Returns an article by id',
@@ -112,9 +126,25 @@ class RootQueryType extends ObjectType
         return $fields;
     }
 
+    public function user($rootValue, $args)
+    {
+        $oUser = oxNew(User::class);
+
+        return $oUser->findUser($args['id']);
+    }
+
+    public function viewer($rootValue, $args, $context)
+    {
+        $oUser = oxNew(User::class);
+        $sViewerId = $context->viewer;
+
+        return $oUser->findUser($sViewerId);
+
+    }
+
     public function article($rootValue, $args)
     {
-        $oCategory = oxNew(Article::class);
+        $oArticle = oxNew(Article::class);
 
         return $oArticle->findArticle($args['id']);
     }

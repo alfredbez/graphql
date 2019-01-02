@@ -14,7 +14,7 @@
  * @version     OXID eSales GraphQL
  */
 
-use \OxidEsales\Eshop\Application\Component\Widget\WidgetController;
+use \OxidEsales\Eshop\Application\Controller\Admin\ModuleConfiguration;
 
 
 /**
@@ -42,6 +42,7 @@ $aModule = [
     'url'         => 'www.oxid-esales.com',
     'email'       => 'ps@oxid-esales.com',
     'extend'      => [
+        ModuleConfiguration::class      => OxidProfessionalServices\GraphQl\Controller\Admin\GraphQLConfig::class,
     ],
     'controllers' => [
         // Admin Controller
@@ -50,17 +51,30 @@ $aModule = [
         'graphql'       => OxidProfessionalServices\GraphQl\Component\Widget\GraphQL::class,
     ],
     'templates'   => [
-        //Admin
-        'graphiql.tpl'    =>  'oxps/graphql/out/js/graphiql.tpl',
+        //Admin Template
+        'graphiql.tpl'    =>  'oxps/graphql/views/admin/tpl/graphiql.tpl',
     ],
     'blocks'      => [
+        [
+            'template' => 'module_config.tpl',
+            'block'    => 'admin_module_config_var_type_str',
+            'file'     => 'views/admin/blocks/admin_module_config_var_type_str.tpl',
+        ]
     ],
     'settings'    => [
         [
-            'group' =>  'main',
-            'name'  =>  'strGraphQLName',
+            'group' =>  'credentials',
+            'name'  =>  'strGraphQLApiKey',
             'type'  =>  'str',
-            'value' =>  'GraphQL Value'
+            'value' =>  '',
+            'action' => 'generateApiKey'
+        ],
+        [
+            'group' =>  'credentials',
+            'name'  =>  'strGraphQLApiSecret',
+            'type'  =>  'str',
+            'value' =>  '',
+            'action' => 'generateApiSecret'
         ],
     ],
     'events'      => [
