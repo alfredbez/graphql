@@ -20,7 +20,7 @@ use OxidEsales\Eshop\Core\Module\ModuleVariablesLocator;
 /**
  *
  */
-class GraphQLConfig extends \OxidEsales\Eshop\Application\Controller\Admin\ModuleConfiguration
+class ModuleConfiguration extends \OxidEsales\Eshop\Application\Controller\Admin\ModuleConfiguration
 {
 
     /**

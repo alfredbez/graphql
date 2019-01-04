@@ -42,7 +42,7 @@ $aModule = [
     'url'         => 'www.oxid-esales.com',
     'email'       => 'ps@oxid-esales.com',
     'extend'      => [
-        ModuleConfiguration::class      => OxidProfessionalServices\GraphQl\Controller\Admin\GraphQLConfig::class,
+        ModuleConfiguration::class      => OxidProfessionalServices\GraphQl\Controller\Admin\ModuleConfiguration::class,
     ],
     'controllers' => [
         // Admin Controller

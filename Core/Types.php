@@ -21,10 +21,11 @@ use OxidProfessionalServices\GraphQl\Core\Type\Enum\ImageSizeEnumType;
 use OxidProfessionalServices\GraphQl\Core\Type\Field\HtmlFieldType;
 use OxidProfessionalServices\GraphQl\Core\Type\Scalar\EmailType;
 use OxidProfessionalServices\GraphQl\Core\Type\Scalar\UrlType;
-use OxidProfessionalServices\GraphQl\Core\Type\Object\UserType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\ArticleType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\CategoryType;
+use OxidProfessionalServices\GraphQl\Core\Type\Object\LoginType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\NodeType;
+use OxidProfessionalServices\GraphQl\Core\Type\Object\UserType;
 
 use OxidProfessionalServices\GraphQl\Core\Type\QueryType;
 use OxidProfessionalServices\GraphQl\Core\Type\MutationType;
@@ -58,12 +59,6 @@ class Types
     private static $mutation;
 
     /**
-     * Stores the user type object
-     *
-     */
-    private static $user;
-
-    /**
      * Stores the article type object
      *
      */
@@ -75,6 +70,17 @@ class Types
      */
     private static $category;
 
+    /**
+     * Stores the login type object
+     *
+     */
+    private static $login;
+
+    /**
+     * Stores the user type object
+     *
+     */
+    private static $user;
 
     // Interface types
     /**
@@ -130,14 +136,6 @@ class Types
     }
 
     /**
-     * @return \OxidProfessionalServices\GraphQl\Core\Type\Object\UserType
-     */
-    public static function user()
-    {
-        return self::$user ?: (self::$user = new UserType());
-    }
-
-    /**
      * Returns the definition for the ArticleType
      *
      * @return \OxidProfessionalServices\GraphQl\Core\Type\Object\ArticleType
@@ -157,6 +155,21 @@ class Types
         return self::$category ?: (self::$category = new CategoryType());
     }
 
+    /**
+     * @return \OxidProfessionalServices\GraphQl\Core\Type\Object\LoginType
+     */
+    public static function login()
+    {
+        return self::$login ?: (self::$login = new LoginType());
+    }
+
+    /**
+     * @return \OxidProfessionalServices\GraphQl\Core\Type\Object\UserType
+     */
+    public static function user()
+    {
+        return self::$user ?: (self::$user = new UserType());
+    }
     /**
      * Returns the definition for the NodeType
      *

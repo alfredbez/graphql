@@ -47,22 +47,31 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
     protected $_oAppContext;
 
     /**
-     * GraphQL constructor
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function init()
+    {
+        /**
+         * Parse incoming query and variables
+         */
+        $aData = $this->getGraphQLRequest();
+        $this->query($aData);
+    }
+
+    /**
+     * GraphQL query
      *
      * @throws \Throwable
      */
-    public function __construct()
+    public function query($aData)
     {
         try {
             /**
              * Prepare context that will be available in all field resolvers (as 3rd argument)
              */
             $oAppContext = $this->getAppContext();
-
-            /**
-             * Parse incoming query and variables
-             */
-            $aData = $this->getGraphQLRequest();
 
             /**
              * GraphQL schema to be passed to query executor:
@@ -81,7 +90,7 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
                 $aData['variables']
             );
 
-            $aOutput = $oResult->toArray($debug);
+            $aOutput = $oResult->toArray(1);
 
         } catch (\Exception $error) {
             $aOutput['errors'] = [
@@ -103,7 +112,7 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
         $aContext = $oAuth->authorize();
 
         $this->_oAppContext = oxNew(AppContext::class);
-        $this->_oAppContext->viewer = $aContext->data->id;
+        $this->_oAppContext->viewer = $aContext->sub;
         $this->_oAppContext->rootUrl = $aContext->iss;
         $this->_oAppContext->request = !empty( $_REQUEST ) ? $_REQUEST : null;
 

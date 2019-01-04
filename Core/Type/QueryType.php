@@ -17,9 +17,9 @@
 namespace OxidProfessionalServices\GraphQl\Core\Type;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
-use OxidProfessionalServices\GraphQl\Model\User;
 use OxidProfessionalServices\GraphQl\Model\Article;
 use OxidProfessionalServices\GraphQl\Model\Category;
+use OxidProfessionalServices\GraphQl\Model\User;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
@@ -47,7 +47,7 @@ class QueryType extends ObjectType
          * Configure Query Type
          */
         $config = [
-            'name' => $this->$typeName,
+            'name' => $this->typeName,
             'description' => 'Primary entry for Queries in the GraphQL Schema.',
             'fields' => $this->fields(),
             'resolveField' => function ($val, $args, $context, ResolveInfo $info) {
@@ -77,6 +77,14 @@ class QueryType extends ObjectType
             'viewer' => [
                 'type' => Types::user(),
                 'description' => 'Represents currently logged-in user'
+            ],
+            'login' => [
+                'type' => Types::login(),
+                'description' => 'Represents a logged-in user',
+                'args' => [
+                    'username' => Types::nonNull(Types::string()),
+                    'password' => Types::nonNull(Types::string()),
+                ],
             ],
             'article' => [
                 'type' => Types::article(),
@@ -129,7 +137,6 @@ class QueryType extends ObjectType
     public function user($rootValue, $args)
     {
         $oUser = oxNew(User::class);
-
         return $oUser->findUser($args['id']);
     }
 
@@ -137,15 +144,18 @@ class QueryType extends ObjectType
     {
         $oUser = oxNew(User::class);
         $sViewerId = $context->viewer;
-
         return $oUser->findUser($sViewerId);
+    }
 
+    public function login($rootValue, $args, $context)
+    {
+        $oUser = oxNew(User::class);
+        return $oUser->login($args['username'], $args['password']);
     }
 
     public function article($rootValue, $args)
     {
         $oArticle = oxNew(Article::class);
-
         return $oArticle->findArticle($args['id']);
     }
 
@@ -153,14 +163,12 @@ class QueryType extends ObjectType
     {
         $oArticle = oxNew(Article::class);
         $args += ['after' => null];
-
         return $oArticle->findArticles($args['limit'], $args['after']);
     }
 
     public function category($rootValue, $args)
     {
         $oCategory = oxNew(Category::class);
-
         return $oCategory->findCategory($args['id']);
     }
 
@@ -168,7 +176,6 @@ class QueryType extends ObjectType
     {
         $oCategory = oxNew(Category::class);
         $args += ['after' => null];
-
         return $oCategory->findCategories($args['limit'], $args['after']);
     }
 

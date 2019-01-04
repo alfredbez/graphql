@@ -52,7 +52,7 @@ class MutationType extends ObjectType
          * Configure Mutation Type
          */
         $config = [
-            'name'          => $this->$typeName,
+            'name'          => $this->typeName,
             'description'   => 'Primary entry point for Mutations in the GraphQL Schema',
             'fields'        => $this->fields(),
             'resolveField'  => function($val, $args, $context, ResolveInfo $info) {
@@ -71,7 +71,7 @@ class MutationType extends ObjectType
      */
     public function fields()
     {
-        if ( null === $this->$fields ) {
+        if ( null === $this->fields ) {
             //TODO
             $fields             = [];
         }

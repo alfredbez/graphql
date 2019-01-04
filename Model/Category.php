@@ -15,11 +15,9 @@
  */
 
 namespace OxidProfessionalServices\GraphQl\Model;
-
-use OxidEsales\Eshop\Core\Model\BaseModel;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 
-class Category extends BaseModel
+class Category extends \OxidEsales\EshopCommunity\Application\Model\Category
 {
     /**
      * Categories list.
@@ -49,7 +47,12 @@ class Category extends BaseModel
             $oDB = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC);
 
             $sCategoriesView = getViewName('oxcategories');
-            $aCategories = $oDB->getAll("SELECT `OXID` AS id,  `OXTITLE` AS title, `OXPARENTID` AS parent FROM `{$sCategoriesView}` WHERE `OXACTIVE` = 1");
+            $aCategories = $oDB->getAll("SELECT `OXID` AS id,
+                `OXTITLE` AS title,
+                `OXTHUMB` AS thumb,
+                `OXICON` AS icon,
+                `OXPARENTID` AS parent
+                FROM `{$sCategoriesView}` WHERE `OXACTIVE` = 1");
 
             $this->_aCategories = $this->_buildCategories($aCategories);
         }

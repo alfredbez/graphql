@@ -37,10 +37,11 @@ class UserType extends ObjectType
             'fields' => function () {
                 return [
                     'id' => Types::id(),
+                    'username' => Types::string(),
                     'email' => Types::email(),
-                    'password' => [
-                        'type' => Types::string(),
-                    ],
+                    'number' => Types::int(),
+                    'firstName' => Types::string(),
+                    'lastName' => Types::string(),
                 ];
             },
             'interfaces' => [

@@ -17,34 +17,33 @@
 namespace OxidProfessionalServices\GraphQl\Core\Type\Object;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
-use OxidProfessionalServices\GraphQl\Model\Category;
+use OxidProfessionalServices\GraphQl\Model\User;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
- * Class GraphQL CategoryType.
+ * Class GraphQL UserType.
  */
-class CategoryType extends ObjectType
+class LoginType extends ObjectType
 {
     /**
-     * CategoryType constructor.
+     * UserType constructor.
      */
     public function __construct()
     {
         $config = [
-            'name' => 'Category',
-            'description' => 'OXID eShop categories',
+            'name' => 'Login',
+            'description' => 'OXID eShop login',
             'fields' => function () {
                 return [
-                    'id' => Types::id(),
-                    'title' => Types::string(),
-                    'thumb' => Types::string(),
-                    'icon' => Types::string(),
-                    'parent' => Types::category(),
+                    'username' => Types::nonNull(Types::email()),
+                    'firstName' => Types::string(),
+                    'lastName' => Types::string(),
+                    'token' => Types::string(),
                 ];
             },
             'interfaces' => [
-                Types::node(),
+                Types::node()
             ],
             'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
                 $method = 'resolve'.ucfirst($info->fieldName);
@@ -59,19 +58,4 @@ class CategoryType extends ObjectType
         parent::__construct($config);
     }
 
-    /**
-     * Resolve parent category.
-     *
-     * @param $category
-     */
-    public function resolveParent($category)
-    {
-        if ($category['parent'] && $category['parent'] !== 'oxrootid') {
-            $oCategory = oxNew(Category::class);
-
-            return $oCategory->findCategory($category['parent']);
-        }
-
-        return null;
-    }
 }

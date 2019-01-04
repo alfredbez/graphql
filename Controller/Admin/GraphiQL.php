@@ -38,13 +38,6 @@ class GraphiQL extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDetai
     public function render()
     {
         parent::render();
-
-        $oUser = $this->getUser();
-        $aData = [
-            'id' => $oUser->getId(),
-            'username' => $oUser->oxuser__oxusername->value,
-        ];
-
         $this->_aViewData["sBearer"] = $this->_auth($aData);
 
         return $this->_sThisTemplate;
@@ -59,24 +52,27 @@ class GraphiQL extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDetai
     protected function _auth($aData)
     {
         $oConfig = Registry::getConfig();
+        $oUser = $this->getUser();
 
+        $sUserId = $oUser->getId();
         $sTokenId = $oConfig->getConfigParam('strGraphQLApiKey');
         $dtIssuedAt = time();
-        $dtNotBefore = $dtIssuedAt + 10; //Adding 10 seconds
-        $dtExpire = strtotime('1 hour'); // Adding 1 year
+        $dtExpire = strtotime('1 year'); // Adding 1 year
         $sServerName = $oConfig->getShopUrl(); // Retrieve the server name from config file
 
         /*
         * Create the token as an array
         */
         $aToken = [
+            'sub'  => $sUserId,             //Subject
             'iat'  => $dtIssuedAt,          // Issued at: time when the token was generated
             'jti'  => $sTokenId,            // Json Token Id: an unique identifier for the token
             'iss'  => $sServerName,         // Issuer
             'aud'  => $sServerName,         // Issuer
-            //'nbf'  => $dtNotBefore,         // Not before
             'exp'  => $dtExpire,            // Expire
-            'data' => $aData,               // Data related to the signer user
+            'data' => [                     // Data related to the signer user
+                'username' => $oUser->oxuser__oxusername->value,
+            ],
         ];
 
 

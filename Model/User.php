@@ -18,6 +18,8 @@ namespace OxidProfessionalServices\GraphQl\Model;
 
 use OxidEsales\Eshop\Core\Model\BaseModel;
 use OxidEsales\Eshop\Core\DatabaseProvider;
+use Exception;
+use GraphQL\Error\Error;
 
 class User extends BaseModel
 {
@@ -49,7 +51,14 @@ class User extends BaseModel
             $oDB = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC);
 
             $sUsersView = getViewName('oxuser');
-            $aUsers = $oDB->getAll("SELECT `OXID` AS id, `OXPASSWORD` AS password, `OXUSERNAME` AS email FROM `{$sUsersView}` WHERE `OXACTIVE` = 1");
+            $aUsers = $oDB->getAll("SELECT `OXID` AS id,
+            `OXUSERNAME` AS username,
+            `OXUSERNAME` AS email,
+            `OXPASSWORD` AS password,
+            `OXCUSTNR` AS number,
+            `OXFNAME` AS firstName,
+            `OXLNAME` AS lastName
+            FROM `{$sUsersView}` WHERE `OXACTIVE` = 1");
 
             $this->_aUsers = $this->_buildUsers($aUsers);
         }
@@ -85,6 +94,28 @@ class User extends BaseModel
     public function findUser($id)
     {
         return isset($this->_aUsers[$id]) ? $this->_aUsers[$id] : null;
+    }
+
+
+    /**
+     * Sign In
+     *
+     * @param string $sUser
+     * @param string $sPass
+     * @return array|null
+     */
+    public function login($sUser, $sPass)
+    {
+        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        try {
+            $oUser->login($sUser, $sPass);
+            $sUserId = $oUser->getId();
+            return $this->_aUsers[$sUserId];
+
+        } catch(\Exception $error) {
+            header('HTTP/1.0 401 Unauthorized');
+            throw new Error('Unauthorized');
+        }
     }
 
     /**
