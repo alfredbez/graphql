@@ -16,87 +16,15 @@
 
 namespace OxidProfessionalServices\GraphQl\Model;
 
+use OxidProfessionalServices\GraphQl\Core\AppContext;
+use OxidProfessionalServices\GraphQl\Core\Auth;
 use OxidEsales\Eshop\Core\Model\BaseModel;
 use OxidEsales\Eshop\Core\DatabaseProvider;
-use Exception;
 use GraphQL\Error\Error;
+use Exception;
 
 class User extends BaseModel
 {
-    /**
-     * Users list.
-     *
-     * @var array
-     */
-    protected $_aUsers = null;
-
-    /**
-     * User class construcotor.
-     */
-    public function __construct()
-    {
-        $this->getUsers();
-    }
-
-    /**
-     * get Users from the DB
-     * @return array|null
-     *
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
-     */
-    public function getUsers()
-    {
-        if ($this->_aUsers == null) {
-            $oDB = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC);
-
-            $sUsersView = getViewName('oxuser');
-            $aUsers = $oDB->getAll("SELECT `OXID` AS id,
-            `OXUSERNAME` AS username,
-            `OXUSERNAME` AS email,
-            `OXPASSWORD` AS password,
-            `OXCUSTNR` AS number,
-            `OXFNAME` AS firstName,
-            `OXLNAME` AS lastName
-            FROM `{$sUsersView}` WHERE `OXACTIVE` = 1");
-
-            $this->_aUsers = $this->_buildUsers($aUsers);
-        }
-        //TODO add related categoryID
-        return $this->_aUsers;
-    }
-
-    /**
-     * Build categoies with the OXID as key.
-     *
-     * @param array $aUsers
-     * @param array $aData
-     * @param int   $iLevel
-     */
-    protected function _buildUsers($aUsers, &$aData = array(), $iLevel = 0)
-    {
-        if ($aUsers) {
-            foreach ($aUsers as $aUser) {
-                $aData[$aUser['id']] = $aUser;
-            }
-            asort($aData);
-        }
-
-        return $aData;
-    }
-
-    /**
-     * Find a user by id.
-     * @param $id
-     *
-     * @return array|null
-     */
-    public function findUser($id)
-    {
-        return isset($this->_aUsers[$id]) ? $this->_aUsers[$id] : null;
-    }
-
-
     /**
      * Sign In
      *
@@ -109,8 +37,9 @@ class User extends BaseModel
         $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
         try {
             $oUser->login($sUser, $sPass);
-            $sUserId = $oUser->getId();
-            return $this->_aUsers[$sUserId];
+            $aUser =$this->authorizeUser($oUser);
+
+            return $aUser;
 
         } catch(\Exception $error) {
             header('HTTP/1.0 401 Unauthorized');
@@ -119,17 +48,37 @@ class User extends BaseModel
     }
 
     /**
-     * Find users.
      *
-     * @param int $limit
-     * @param string $afterId
+     */
+    private function authorizeUser($oUser){
+        // create json web token
+        $oAuth = oxNew(Auth::class);
+        $sJwt = $oAuth->sign($oUser);
+
+        $aUser = [
+            'id' => $oUser->getId(),
+            'username' => $oUser->oxuser__oxusername->value,
+            'email' => $oUser->oxuser__oxusername->value,
+            'number' => $oUser->oxuser__oxcustnr->value,
+            'firstName' => $oUser->oxuser__oxfname->value,
+            'lastName' => $oUser->oxuser__oxlname->value,
+            'token' => $sJwt
+        ];
+
+        return $aUser;
+    }
+
+    /**
+     * Find a user by id.
+     * @param $id
      *
      * @return array|null
      */
-    public function findUsers($limit, $afterId = null)
+    public function findUser($id)
     {
-        $start = $afterId ? (int) array_search($afterId, array_keys($this->_aUsers)) + 1 : 0;
+        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        $oUser->load($id);
 
-        return array_slice(array_values($this->_aUsers), $start, $limit);
+        return $this->authorizeUser($oUser);
     }
 }

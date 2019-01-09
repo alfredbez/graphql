@@ -36,6 +36,61 @@ class Auth
     protected $_oGraphQLConfig;
 
     /**
+     * Get authorization token
+     *
+     * @param array $aData
+     * @return string
+     */
+    public function sign($oUser)
+    {
+        $oConfig = Registry::getConfig();
+
+        $sUserId = $oUser->getId();
+        $sTokenId = $oConfig->getConfigParam('strGraphQLApiKey');
+        $dtIssuedAt = time();
+        $dtExpire = strtotime('1 year'); // Adding 1 year
+        $sServerName = $oConfig->getShopUrl(); // Retrieve the server name from config file
+
+        /*
+        * Create the token as an array
+        */
+        $aToken = [
+            'sub'  => $sUserId,             //Subject
+            'iat'  => $dtIssuedAt,          // Issued at: time when the token was generated
+            'jti'  => $sTokenId,            // Json Token Id: an unique identifier for the token
+            'iss'  => $sServerName,         // Issuer
+            'aud'  => $sServerName,         // Issuer
+            'exp'  => $dtExpire,            // Expire
+            'data' => [                     // Data related to the signer user
+                'username' => $oUser->oxuser__oxusername->value,
+            ],
+        ];
+
+
+        /*
+        * Extract the key, which is coming from the config file.
+        *
+        * keep it secure! You'll need the exact key to verify the
+        * token later.
+        */
+        $sSecretKey = $oConfig->getConfigParam('strGraphQLApiSecret');
+
+        /*
+        * Encode the array to a JWT string.
+        * Second parameter is the key to encode the token.
+        *
+        * The output string can be validated at http://jwt.io/
+        */
+        $sJwt = JWT::encode(
+            $aToken,      //Data to be encoded in the JWT
+            $sSecretKey, // The signing key
+            'HS512'     // Algorithm used to sign the token, see https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#section-3
+        );
+
+        return $sJwt;
+    }
+
+    /**
      * Get access token from header and authorize
      *
      * @return string
@@ -57,7 +112,7 @@ class Auth
                     /*
                     * return protected asset
                     */
-                    return $this->authorizationCheck($jwt);
+                    return $this->verify($jwt);
 
                 } catch(Exception $e) {
                     /*
@@ -120,7 +175,7 @@ class Auth
      *
      * @var $sToken
      */
-    public function authorizationCheck($sToken)
+    public function verify($sToken)
     {
         $sApiSecret = $this->getConfig()->getApiSecret();
 

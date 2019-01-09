@@ -21,6 +21,7 @@ use OxidProfessionalServices\GraphQl\Core\Type\Enum\ImageSizeEnumType;
 use OxidProfessionalServices\GraphQl\Core\Type\Field\HtmlFieldType;
 use OxidProfessionalServices\GraphQl\Core\Type\Scalar\EmailType;
 use OxidProfessionalServices\GraphQl\Core\Type\Scalar\UrlType;
+use OxidProfessionalServices\GraphQl\Core\Type\Object\ActionType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\ArticleType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\CategoryType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\LoginType;
@@ -57,6 +58,12 @@ class Types
      *
      */
     private static $mutation;
+
+    /**
+     * Stores the action type object
+     *
+     */
+    private static $action;
 
     /**
      * Stores the article type object
@@ -133,6 +140,16 @@ class Types
     public static function mutation()
     {
         return self::$mutation ?: (self::$mutation = new MutationType());
+    }
+
+    /**
+     * Returns the definition for the ActionType
+     *
+     * @return \OxidProfessionalServices\GraphQl\Core\Type\Object\ActionType
+     */
+    public static function action()
+    {
+        return self::$action ?: (self::$action = new ActionType());
     }
 
     /**

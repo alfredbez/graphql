@@ -38,8 +38,13 @@ class ArticleType extends ObjectType
             'fields' => function () {
                 return [
                     'id' => Types::id(),
+                    'sku' => Types::string(),
                     'title' => Types::string(),
-                    'num' => Types::string(),
+                    'description' => Types::string(),
+                    'price' => Types::string(),
+                    'image' => Types::string(),
+                    'thumb' => Types::string(),
+                    'icon,' => Types::string(),
                     'category' => Types::category(), //TODO
                     'parent' => Types::article(),
                 ];
@@ -48,11 +53,13 @@ class ArticleType extends ObjectType
                 Types::node(),
             ],
             'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
-                $method = 'resolve'.ucfirst($info->fieldName);
-                if (method_exists($this, $method)) {
-                    return $this->{$method}($value, $args, $context, $info);
-                } else {
-                    return $value[$info->fieldName];
+                if($context->viewer){
+                    $method = 'resolve'.ucfirst($info->fieldName);
+                    if (method_exists($this, $method)) {
+                        return $this->{$method}($value, $args, $context, $info);
+                    } else {
+                        return $value[$info->fieldName];
+                    }
                 }
             },
         ];

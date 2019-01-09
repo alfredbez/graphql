@@ -49,6 +49,7 @@ class Category extends \OxidEsales\EshopCommunity\Application\Model\Category
             $sCategoriesView = getViewName('oxcategories');
             $aCategories = $oDB->getAll("SELECT `OXID` AS id,
                 `OXTITLE` AS title,
+                `OXDESC` AS description,
                 `OXTHUMB` AS thumb,
                 `OXICON` AS icon,
                 `OXPARENTID` AS parent

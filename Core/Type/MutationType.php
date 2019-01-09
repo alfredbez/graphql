@@ -19,6 +19,8 @@ namespace OxidProfessionalServices\GraphQl\Core\Type;
 use OxidProfessionalServices\GraphQl\Core\Types;
 use OxidProfessionalServices\GraphQl\Core\AppContext;
 use OxidProfessionalServices\GraphQl\Model\DataSource;
+use OxidProfessionalServices\GraphQl\Model\User;
+
 
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -73,7 +75,16 @@ class MutationType extends ObjectType
     {
         if ( null === $this->fields ) {
             //TODO
-            $fields             = [];
+            $fields             = [
+                'login' => [
+                    'type' => Types::login(),
+                    'description' => 'Represents a logged-in user',
+                    'args' => [
+                        'username' => Types::nonNull(Types::string()),
+                        'password' => Types::nonNull(Types::string()),
+                    ],
+                ],
+            ];
         }
 
         /**
@@ -84,5 +95,11 @@ class MutationType extends ObjectType
 
         return $fields;
 
+    }
+
+    public function login($rootValue, $args, $context)
+    {
+        $oUser = oxNew(User::class);
+        return $oUser->login($args['username'], $args['password']);
     }
 }

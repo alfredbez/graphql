@@ -17,6 +17,7 @@
 namespace OxidProfessionalServices\GraphQl\Core\Type\Object;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
+use OxidProfessionalServices\GraphQl\Model\Article;
 use OxidProfessionalServices\GraphQl\Model\Category;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -38,9 +39,21 @@ class CategoryType extends ObjectType
                 return [
                     'id' => Types::id(),
                     'title' => Types::string(),
+                    'description' => Types::string(),
                     'thumb' => Types::string(),
                     'icon' => Types::string(),
                     'parent' => Types::category(),
+                    'articles' => [
+                        'type' => Types::listOf(Types::article()),
+                        'description' => 'Returns list of articles',
+                        'args' => [
+                            'limit' => [
+                                'type' => Types::int(),
+                                'description' => 'Number of articles to be returned',
+                                'defaultValue' => 5,
+                            ],
+                        ],
+                    ],
                 ];
             },
             'interfaces' => [
@@ -68,10 +81,20 @@ class CategoryType extends ObjectType
     {
         if ($category['parent'] && $category['parent'] !== 'oxrootid') {
             $oCategory = oxNew(Category::class);
-
             return $oCategory->findCategory($category['parent']);
         }
 
         return null;
+    }
+
+        /**
+     * Resolve parent category.
+     *
+     * @param $category
+     */
+    public function resolveArticles($rootValue, $args)
+    {
+        $oArticle = oxNew(Article::class);
+        return $oArticle->findCategoryArticles($rootValue, $args['limit']);
     }
 }

@@ -17,6 +17,7 @@
 namespace OxidProfessionalServices\GraphQl\Core\Type;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
+use OxidProfessionalServices\GraphQl\Model\Action;
 use OxidProfessionalServices\GraphQl\Model\Article;
 use OxidProfessionalServices\GraphQl\Model\Category;
 use OxidProfessionalServices\GraphQl\Model\User;
@@ -67,23 +68,27 @@ class QueryType extends ObjectType
     public function fields()
     {
         $fields = [
-            'user' => [
-                'type' => Types::user(),
-                'description' => 'Returns user by id',
+            'action' => [
+                'type' => Types::action(),
+                'description' => 'Returns an action by id',
                 'args' => [
-                    'id' => Types::nonNull(Types::id())
-                ]
+                    'id' => Types::nonNull(Types::id()),
+                ],
             ],
-            'viewer' => [
-                'type' => Types::user(),
-                'description' => 'Represents currently logged-in user'
-            ],
-            'login' => [
-                'type' => Types::login(),
-                'description' => 'Represents a logged-in user',
+            'actions' => [
+                'type' => Types::listOf(Types::action()),
+                'description' => 'Returns list of actions',
                 'args' => [
-                    'username' => Types::nonNull(Types::string()),
-                    'password' => Types::nonNull(Types::string()),
+                    'limit' => [
+                        'type' => Types::int(),
+                        'description' => 'Number of actions to be returned',
+                        'defaultValue' => 20,
+                    ],
+                    'group' => [
+                        'type' => Types::int(),
+                        'description' => 'Type of the action to be returned',
+                        'defaultValue' => 3,
+                    ],
                 ],
             ],
             'article' => [
@@ -122,7 +127,17 @@ class QueryType extends ObjectType
                     ],
                 ],
             ],
-            'welcome' => Types::string(),
+            'user' => [
+                'type' => Types::user(),
+                'description' => 'Returns user by id',
+                'args' => [
+                    'id' => Types::nonNull(Types::id())
+                ]
+            ],
+            'viewer' => [
+                'type' => Types::user(),
+                'description' => 'Represents currently logged-in user'
+            ],
         ];
 
         /*
@@ -134,23 +149,16 @@ class QueryType extends ObjectType
         return $fields;
     }
 
-    public function user($rootValue, $args)
+    public function action($rootValue, $args)
     {
-        $oUser = oxNew(User::class);
-        return $oUser->findUser($args['id']);
+        $oAction = oxNew(Action::class);
+        return $oAction->findAction($args['id']);
     }
 
-    public function viewer($rootValue, $args, $context)
+    public function actions($rootValue, $args)
     {
-        $oUser = oxNew(User::class);
-        $sViewerId = $context->viewer;
-        return $oUser->findUser($sViewerId);
-    }
-
-    public function login($rootValue, $args, $context)
-    {
-        $oUser = oxNew(User::class);
-        return $oUser->login($args['username'], $args['password']);
+        $oAction = oxNew(Action::class);
+        return $oAction->findActions($args['limit'], $args['group']);
     }
 
     public function article($rootValue, $args)
@@ -177,6 +185,19 @@ class QueryType extends ObjectType
         $oCategory = oxNew(Category::class);
         $args += ['after' => null];
         return $oCategory->findCategories($args['limit'], $args['after']);
+    }
+
+    public function user($rootValue, $args)
+    {
+        $oUser = oxNew(User::class);
+        return $oUser->findUser($args['id']);
+    }
+
+    public function viewer($rootValue, $args, $context)
+    {
+        $oUser = oxNew(User::class);
+        $sViewerId = $context->viewer;
+        return $oUser->findUser($sViewerId);
     }
 
     public function welcome()

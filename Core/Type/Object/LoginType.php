@@ -36,10 +36,12 @@ class LoginType extends ObjectType
             'description' => 'OXID eShop login',
             'fields' => function () {
                 return [
-                    'username' => Types::nonNull(Types::email()),
+                    'id' =>  Types::nonNull(Types::id()),
+                    'token' =>  Types::nonNull(Types::string()),
+                    'email' => Types::email(),
+                    'clientNumber' => Types::string(),
                     'firstName' => Types::string(),
-                    'lastName' => Types::string(),
-                    'token' => Types::string(),
+                    'lastName' => Types::string()
                 ];
             },
             'interfaces' => [

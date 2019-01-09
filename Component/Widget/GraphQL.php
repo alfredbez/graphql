@@ -8,6 +8,7 @@
  * civil and criminal law.
  *
  * @category    module
+ *
  * @package     GraphQL
  * @link        http://www.oxid-esales.com
  * @copyright   (C) OXID eSales AG 2003-2018
@@ -113,7 +114,7 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
 
         $this->_oAppContext = oxNew(AppContext::class);
         $this->_oAppContext->viewer = $aContext->sub;
-        $this->_oAppContext->rootUrl = $aContext->iss;
+        $this->_oAppContext->rootUrl = $aContext->aud;
         $this->_oAppContext->request = !empty( $_REQUEST ) ? $_REQUEST : null;
 
         return $this->_oAppContext;

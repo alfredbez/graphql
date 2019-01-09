@@ -15,6 +15,8 @@
  */
 
 namespace OxidProfessionalServices\GraphQl\Controller\Admin;
+
+use OxidProfessionalServices\GraphQl\Core\Auth;
 use OxidEsales\Eshop\Core\Registry;
 use \Firebase\JWT\JWT;
 
@@ -38,64 +40,14 @@ class GraphiQL extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDetai
     public function render()
     {
         parent::render();
-        $this->_aViewData["sBearer"] = $this->_auth($aData);
+
+        $oUser = $this->getUser();
+
+        $oAuth = oxNew(Auth::class);
+        $sJwt = $oAuth->sign($oUser);
+        $this->_aViewData["sBearer"] = $sJwt;
 
         return $this->_sThisTemplate;
     }
 
-    /**
-     * Get authorization token
-     *
-     * @param array $aData
-     * @return string
-     */
-    protected function _auth($aData)
-    {
-        $oConfig = Registry::getConfig();
-        $oUser = $this->getUser();
-
-        $sUserId = $oUser->getId();
-        $sTokenId = $oConfig->getConfigParam('strGraphQLApiKey');
-        $dtIssuedAt = time();
-        $dtExpire = strtotime('1 year'); // Adding 1 year
-        $sServerName = $oConfig->getShopUrl(); // Retrieve the server name from config file
-
-        /*
-        * Create the token as an array
-        */
-        $aToken = [
-            'sub'  => $sUserId,             //Subject
-            'iat'  => $dtIssuedAt,          // Issued at: time when the token was generated
-            'jti'  => $sTokenId,            // Json Token Id: an unique identifier for the token
-            'iss'  => $sServerName,         // Issuer
-            'aud'  => $sServerName,         // Issuer
-            'exp'  => $dtExpire,            // Expire
-            'data' => [                     // Data related to the signer user
-                'username' => $oUser->oxuser__oxusername->value,
-            ],
-        ];
-
-
-        /*
-        * Extract the key, which is coming from the config file.
-        *
-        * keep it secure! You'll need the exact key to verify the
-        * token later.
-        */
-        $sSecretKey = $oConfig->getConfigParam('strGraphQLApiSecret');
-
-        /*
-        * Encode the array to a JWT string.
-        * Second parameter is the key to encode the token.
-        *
-        * The output string can be validated at http://jwt.io/
-        */
-        $sJwt = JWT::encode(
-            $aToken,      //Data to be encoded in the JWT
-            $sSecretKey, // The signing key
-            'HS512'     // Algorithm used to sign the token, see https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#section-3
-        );
-
-        return $sJwt;
-    }
 }

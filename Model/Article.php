@@ -33,7 +33,7 @@ class Article extends BaseModel
      */
     public function __construct()
     {
-        $this->getArticles();
+        //$this->getArticles();
     }
 
     /**
@@ -43,13 +43,23 @@ class Article extends BaseModel
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
      */
-    public function getArticles()
+    public function getArticles($limit)
     {
         if ($this->_aArticles == null) {
             $oDB = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC);
 
             $sArticlesView = getViewName('oxarticles');
-            $aArticles = $oDB->getAll("SELECT `OXID` AS id,  `OXARTNUM` AS num, `OXTITLE` AS title, `OXPARENTID` AS parent FROM `{$sArticlesView}` WHERE `OXACTIVE` = 1");
+            $aArticles = $oDB->getAll("SELECT
+                `OXID` AS id,
+                `OXARTNUM` AS sku,
+                `OXTITLE` AS title,
+                `OXSHORTDESC` AS description,
+                `OXPRICE` AS price,
+                `OXTHUMB` AS thumb,
+                `OXICON` AS icon,
+                `OXPIC1` AS image,
+                `OXPARENTID` AS parent
+                FROM `{$sArticlesView}` WHERE `OXACTIVE` = 1 LIMIT {$limit}");
 
             $this->_aArticles = $this->_buildArticles($aArticles);
         }
@@ -80,6 +90,7 @@ class Article extends BaseModel
      * Find a article by id.
      * @param $id
      *
+     *
      * @return array|null
      */
     public function findArticle($id)
@@ -97,6 +108,24 @@ class Article extends BaseModel
      */
     public function findArticles($limit, $afterId = null)
     {
+        $this->getArticles($limit);
+        $start = $afterId ? (int) array_search($afterId, array_keys($this->_aArticles)) + 1 : 0;
+
+        return array_slice(array_values($this->_aArticles), $start, $limit);
+    }
+
+    /**
+     * Find categories articles.
+     *
+     * @param int $limit
+     * @param string $afterId
+     *
+     * @return array|null
+     */
+    public function findCategoryArticles($catId, $limit, $afterId = null)
+    {
+        //TODO
+        $this->getArticles($limit);
         $start = $afterId ? (int) array_search($afterId, array_keys($this->_aArticles)) + 1 : 0;
 
         return array_slice(array_values($this->_aArticles), $start, $limit);
