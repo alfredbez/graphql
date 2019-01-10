@@ -15,6 +15,7 @@
  */
 
 use \OxidEsales\Eshop\Application\Controller\Admin\ModuleConfiguration;
+use \OxidEsales\Eshop\Application\Controller\Admin\NavigationTree;
 
 
 /**
@@ -43,16 +44,19 @@ $aModule = [
     'email'       => 'ps@oxid-esales.com',
     'extend'      => [
         ModuleConfiguration::class      => OxidProfessionalServices\GraphQl\Controller\Admin\ModuleConfiguration::class,
+        NavigationTree::class      => OxidProfessionalServices\GraphQl\Controller\Admin\NavigationTree::class,
     ],
     'controllers' => [
         // Admin Controller
         'graphiql'      => OxidProfessionalServices\GraphQl\Controller\Admin\GraphiQL::class,
+        'voyager'      => OxidProfessionalServices\GraphQl\Controller\Admin\Voyager::class,
         // Widget Controller
         'graphql'       => OxidProfessionalServices\GraphQl\Component\Widget\GraphQL::class,
     ],
     'templates'   => [
         //Admin Template
         'graphiql.tpl'    =>  'oxps/graphql/views/admin/tpl/graphiql.tpl',
+        'voyager.tpl'    =>  'oxps/graphql/views/admin/tpl/voyager.tpl',
     ],
     'blocks'      => [
         [
@@ -85,6 +89,12 @@ $aModule = [
         [
             'group' =>  'tools',
             'name'  =>  'blGraphiQLTool',
+            'type'  =>  'bool',
+            'value' =>  true,
+        ],
+        [
+            'group' =>  'tools',
+            'name'  =>  'blVoyagerTool',
             'type'  =>  'bool',
             'value' =>  true,
         ],

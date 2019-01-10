@@ -3,18 +3,6 @@
     <title>OXID GraphQL</title>
     <meta http-equiv="Content-Type" content="text/html; charset=[{oxmultilang ident='charset'}]">
 
-    <style>
-        body {
-        height: 100%;
-        margin: 0;
-        width: 100%;
-        overflow: hidden;
-        }
-        #graphiql {
-        height: 100vh;
-        }
-    </style>
-
     <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
@@ -22,6 +10,18 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/theme/solarized.css" />
     <link rel="stylesheet" type="text/css" href="[{$oViewConf->getModuleUrl('oxps/graphql','out/src/css/graphiql.css')}]">
+
+    <style>
+        body {
+            height: 100%;
+            margin: 0;
+            width: 100%;
+            overflow: hidden;
+        }
+        #graphiql {
+            height: 100vh;
+        }
+    </style>
 </head>
 <body>
     <noscript>
@@ -84,6 +84,7 @@
         // use fetch, and could instead implement graphQLFetcher however you like,
         // as long as it returns a Promise or Observable.
         function graphQLFetcher(graphQLParams) {
+            // This expects a GraphQL server at the path /graphql.
             return fetch(`${window.location.origin}/graphql/`, {
                 method: 'post',
                 headers: {

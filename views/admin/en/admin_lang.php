@@ -21,5 +21,6 @@ $aLang = [
 
     'OXPS_GRAPHQL'                          =>  'GraphQL',
     'OXPS_GRAPHIQL'                         =>  'Graph<i>i</i>QL',
+    'OXPS_VOYAGER'                          =>  'Voyager',
 ];
 

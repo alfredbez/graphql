@@ -51,7 +51,7 @@ class ArticleType extends ObjectType
                     'price' => Types::string(),
                     'image' => Types::string(),
                     'thumb' => Types::string(),
-                    'icon,' => Types::string(),
+                    'icon' => Types::string(),
                     'category' => Types::category(), //TODO
                     'parent' => Types::article(),
                 ];

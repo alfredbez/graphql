@@ -21,16 +21,16 @@ use OxidEsales\Eshop\Core\Registry;
 use \Firebase\JWT\JWT;
 
 /**
- * GraphiQL Admin Tool
+ * Voyager Admin Tool
  */
-class GraphiQL extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController
+class Voyager extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController
 {
     /**
      * Template to render
      *
      * @var string
      */
-    protected $_sThisTemplate = 'graphiql.tpl';
+    protected $_sThisTemplate = 'voyager.tpl';
 
     /**
      * Render
@@ -41,6 +41,7 @@ class GraphiQL extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDetai
     {
         parent::render();
         $oConfig = Registry::getConfig();
+        $blGraphiQLTool = $oConfig->getConfigParam('blGraphiQLTool');
 
         $oUser = $this->getUser();
 

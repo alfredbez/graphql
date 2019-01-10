@@ -26,10 +26,13 @@ $aLang = [
     'HELP_SHOP_MODULE_strGraphQLApiKey'     => 'Generieren Sie den Entwickler GraphQL-API-Schlüssel zur Verwendung mit diesem Shop',
     'SHOP_MODULE_strGraphQLApiSecret'       => 'API Secret',
     'HELP_SHOP_MODULE_strGraphQLApiSecret'  => 'Generieren Sie den Entwickler GraphQL-API-Geheimnis zur Verwendung mit diesem Shop',
-    'SHOP_MODULE_blGraphiQLTool'            => 'GraphiQL Entwickler Werkzeug',
-    'HELP_SHOP_MODULE_blGraphiQLTool'       => 'Aktivieren GraphiQL (/ˈɡrafək(ə)l/) eine grafische interaktive GraphQL-IDE im OXID',
     'SHOP_MODULE_strGraphQLTokenExp'        => 'JWT-Ablaufzeit',
     'HELP_SHOP_MODULE_strGraphQLTokenExp'   => 'Der Verfallszeitanspruch gibt die Verfallszeit an, ab oder zu der die JWT NICHT zur Verarbeitung akzeptiert werden darf.',
+
+    'SHOP_MODULE_blGraphiQLTool'            => 'GraphiQL Entwickler Werkzeug',
+    'HELP_SHOP_MODULE_blGraphiQLTool'       => 'Aktivieren GraphiQL (/ˈɡrafək(ə)l/) eine grafische interaktive GraphQL-IDE im OXID',
+    'SHOP_MODULE_blVoyagerTool'             => 'GraphQL Voyager Entwickler Werkzeug',
+    'HELP_SHOP_MODULE_blVoyagerTool'        => 'Vertreten die OXID GraphQL API als interaktives Diagramm',
 
     'MODULE_GENERATE'                       => 'Generieren',
     'MODULE_REGENERATE'                     => 'Regenerieren',

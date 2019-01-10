@@ -16,39 +16,35 @@
 
 namespace OxidProfessionalServices\GraphQl\Controller\Admin;
 
-use OxidProfessionalServices\GraphQl\Core\Auth;
-use OxidEsales\Eshop\Core\Registry;
-use \Firebase\JWT\JWT;
-
 /**
- * GraphiQL Admin Tool
+ *
  */
-class GraphiQL extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController
+class NavigationTree extends \OxidEsales\Eshop\Application\Controller\Admin\NavigationTree
 {
     /**
-     * Template to render
+     * Init function
      *
-     * @var string
+     * @return void
      */
-    protected $_sThisTemplate = 'graphiql.tpl';
+    public function init()
+    {
+        $blGraphiQLTool = $oConfig->getConfigParam('blGraphiQLTool');
+        $blVoyagerTool = $oConfig->getConfigParam('blVoyagerTool');
+
+    }
 
     /**
-     * Render
+     * Render module settings tab
+     * and add actions
      *
      * @return string
      */
     public function render()
     {
-        parent::render();
-        $oConfig = Registry::getConfig();
+        $sRet = parent::render();
+        //TODO
 
-        $oUser = $this->getUser();
-
-        $oAuth = oxNew(Auth::class);
-        $sJwt = $oAuth->sign($oUser);
-        $this->_aViewData["sBearer"] = $sJwt;
-
-        return $this->_sThisTemplate;
+        return $sRet;
     }
 
 }
