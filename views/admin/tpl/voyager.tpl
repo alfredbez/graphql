@@ -109,7 +109,7 @@
             introspection: introspectionProvider,
             hideSettings: false,
             displayOptions: {
-                sortByAlphabet: true
+                sortByAlphabet: false
             }
         })
     </script>

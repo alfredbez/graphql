@@ -41,7 +41,7 @@ class ArticleType extends ObjectType
     {
         $config = [
             'name' => $this->typeName,
-            'description' => 'OXID eShop categories',
+            'description' => 'OXID eShop article',
             'fields' => function () {
                 return [
                     'id' => Types::id(),
