@@ -27,13 +27,20 @@ use GraphQL\Type\Definition\UnionType;
  */
 class SearchResultType extends UnionType
 {
+        /**
+    * Type name.
+    *
+    * @var string
+    */
+    private $typeName = 'SearchResult';
+
     /**
      * SearchResultType constructor.
      */
     public function __construct()
     {
         $config = [
-            'name' => 'SearchResultType',
+            'name' => $this->typeName,
             'types' => function() {
                 return [
                     Types::category(),

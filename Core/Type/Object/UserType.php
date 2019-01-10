@@ -27,12 +27,19 @@ use GraphQL\Type\Definition\ResolveInfo;
 class UserType extends ObjectType
 {
     /**
+    * Type name.
+    *
+    * @var string
+    */
+    private $typeName = 'User';
+
+    /**
      * UserType constructor.
      */
     public function __construct()
     {
         $config = [
-            'name' => 'User',
+            'name' => $this->typeName,
             'description' => 'OXID eShop users',
             'fields' => function () {
                 return [

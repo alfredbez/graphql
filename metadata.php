@@ -76,6 +76,18 @@ $aModule = [
             'value' =>  '',
             'action' => 'generateApiSecret'
         ],
+        [
+            'group' =>  'credentials',
+            'name'  =>  'strGraphQLTokenExp',
+            'type'  =>  'str',
+            'value' =>  '1 year', // Adding 1 year
+        ],
+        [
+            'group' =>  'tools',
+            'name'  =>  'blGraphiQLTool',
+            'type'  =>  'bool',
+            'value' =>  true,
+        ],
     ],
     'events'      => [
         'onActivate'   => 'OxidProfessionalServices\\GraphQl\\Core\\Events::onActivate',

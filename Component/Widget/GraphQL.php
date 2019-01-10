@@ -48,31 +48,51 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
     protected $_oAppContext;
 
     /**
-     * Undocumented function
+     * Debug mode
+     *
+    */
+    protected $_blDebug;
+
+    /**
+     * Init function
      *
      * @return void
      */
     public function init()
     {
-        /**
-         * Parse incoming query and variables
-         */
-        $aData = $this->getGraphQLRequest();
-        $this->query($aData);
+        // Disable default PHP error reporting - we have better one for debug mode (see bellow)
+        ini_set('display_errors', 0);
+       $this->_blDebug = false;
+
+        if (!empty($_GET['debug'])) {
+            set_error_handler(function($severity, $message, $file, $line) use (&$phpErrors) {
+                throw new ErrorException($message, 0, $severity, $file, $line);
+            });
+            $this->_blDebug  = Debug::INCLUDE_DEBUG_MESSAGE | Debug::INCLUDE_TRACE;
+        }
+
+        $this->setAppContext();
+        $this->executeQuery();
+
     }
 
     /**
-     * GraphQL query
+     * Execute the GraphQL query
      *
      * @throws \Throwable
      */
-    public function query($aData)
+    public function executeQuery()
     {
         try {
             /**
              * Prepare context that will be available in all field resolvers (as 3rd argument)
              */
             $oAppContext = $this->getAppContext();
+
+                        /**
+             * Parse incoming query and variables
+             */
+            $aData = $this->getGraphQLRequest();
 
             /**
              * GraphQL schema to be passed to query executor:
@@ -88,18 +108,39 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
                 $aData['query'],
                 null,
                 $oAppContext,
-                $aData['variables']
+                (array) $aData['variables'],
+                $aData['operationName']
             );
 
-            $aOutput = $oResult->toArray(1);
+            $aOutput = $oResult->toArray($this->_blDebug);
+            $iHttpStatus = 200;
 
         } catch (\Exception $error) {
             $aOutput['errors'] = [
-                FormattedError::createFromException($error, true)
+                FormattedError::createFromException($error, $this->_blDebug)
             ];
+            $iHttpStatus = 500;
         }
 
-        $this->renderJsonResponse($aOutput);
+        $this->renderJsonResponse($aOutput, $iHttpStatus);
+    }
+
+    /**
+     * set the AppContext for use in passing down the Resolve Tree
+     *
+     * @return \OxidProfessionalServices\GraphQl\Core\AppContext
+     */
+    private function setAppContext()
+    {
+        $oAuth = oxNew(Auth::class);
+        $aContext = $oAuth->authorize();
+
+        $this->_oAppContext = oxNew(AppContext::class);
+        $this->_oAppContext->request = !empty( $_REQUEST ) ? $_REQUEST : null;
+        $this->_oAppContext->viewer = $aContext->sub;
+        $this->_oAppContext->rootUrl = $aContext->aud;
+
+        return $this->_oAppContext;
     }
 
     /**
@@ -109,16 +150,12 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
      */
     private function getAppContext()
     {
-        $oAuth = oxNew(Auth::class);
-        $aContext = $oAuth->authorize();
-
-        $this->_oAppContext = oxNew(AppContext::class);
-        $this->_oAppContext->viewer = $aContext->sub;
-        $this->_oAppContext->rootUrl = $aContext->aud;
-        $this->_oAppContext->request = !empty( $_REQUEST ) ? $_REQUEST : null;
-
+        if (null === $this->_oAppContext){
+            $this->_oAppContext = oxNew(AppContext::class);
+        }
         return $this->_oAppContext;
     }
+
 
     /**
      * Returns the Schema as defined by static registrations
@@ -162,9 +199,10 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
             $aData = $_REQUEST;
         }
 
-        $aData += ['query' => null, 'variables' => null];
+        $aData += ['query' => null, 'variables' => null, 'operationName' => null];
+
         if (null === $aData['query']) {
-            $aData['query'] = '{  Message: welcome }';
+            $aData['query'] = '{welcome}';
         }
 
         return $aData;
@@ -175,7 +213,7 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
      *
      * @param $aResult
      */
-    protected function renderJsonResponse($aResult)
+    protected function renderJsonResponse($aResult, $httpStatus)
     {
         /**
          * Force json content type by oxid framework
@@ -183,7 +221,8 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
         $_GET['renderPartial'] = 1;
 
         $oUtils = Registry::getUtils();
-        $oUtils->setHeader('Content-Type: application/json');
+        $oUtils->setHeader('Content-Type: application/json', true, $httpStatus);
+
         $oUtils->showMessageAndExit(json_encode($aResult));
 
     }

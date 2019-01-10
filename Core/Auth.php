@@ -48,7 +48,7 @@ class Auth
         $sUserId = $oUser->getId();
         $sTokenId = $oConfig->getConfigParam('strGraphQLApiKey');
         $dtIssuedAt = time();
-        $dtExpire = strtotime('1 year'); // Adding 1 year
+        $dtExpire = strtotime($oConfig->getConfigParam('strGraphQLTokenExp')); // Default 1 year
         $sServerName = $oConfig->getShopUrl(); // Retrieve the server name from config file
 
         /*

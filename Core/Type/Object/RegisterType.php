@@ -17,41 +17,42 @@
 namespace OxidProfessionalServices\GraphQl\Core\Type\Object;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
-use OxidProfessionalServices\GraphQl\Model\Action;
+use OxidProfessionalServices\GraphQl\Model\User;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
- * Class GraphQL ActionType.
+ * Class GraphQL UserType.
  */
-class ActionType extends ObjectType
+class RegisterType extends ObjectType
 {
     /**
-     * Type name.
-     *
-     * @var string
-     */
-    private $typeName = 'Action';
+    * Type name.
+    *
+    * @var string
+    */
+    private $typeName = 'Register';
 
     /**
-     * ActionType constructor.
+     * UserType constructor.
      */
     public function __construct()
     {
         $config = [
             'name' => $this->typeName,
-            'description' => 'OXID eShop actions',
+            'description' => 'OXID eShop user sign up',
             'fields' => function () {
                 return [
-                    'id' => Types::id(),
-                    'title' => Types::string(),
-                    'description' => Types::string(),
-                    'image' => Types::string(),
-                    'link' => Types::string()
+                    'id' =>  Types::nonNull(Types::id()),
+                    'token' =>  Types::nonNull(Types::string()),
+                    'email' => Types::email(),
+                    'clientNumber' => Types::string(),
+                    'firstName' => Types::string(),
+                    'lastName' => Types::string()
                 ];
             },
             'interfaces' => [
-                Types::node(),
+                Types::node()
             ],
             'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
                 $method = 'resolve'.ucfirst($info->fieldName);
@@ -65,4 +66,5 @@ class ActionType extends ObjectType
 
         parent::__construct($config);
     }
+
 }

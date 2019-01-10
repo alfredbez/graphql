@@ -28,12 +28,19 @@ use GraphQL\Type\Definition\ResolveInfo;
 class CategoryType extends ObjectType
 {
     /**
+    * Type name.
+    *
+    * @var string
+    */
+    private $typeName = 'Category';
+
+   /**
      * CategoryType constructor.
      */
     public function __construct()
     {
         $config = [
-            'name' => 'Category',
+            'name' => $this->typeName,
             'description' => 'OXID eShop categories',
             'fields' => function () {
                 return [

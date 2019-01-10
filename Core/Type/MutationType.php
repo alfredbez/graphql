@@ -78,10 +78,20 @@ class MutationType extends ObjectType
             $fields             = [
                 'login' => [
                     'type' => Types::login(),
-                    'description' => 'Represents a logged-in user',
+                    'description' => 'Sign in with a registered user',
                     'args' => [
                         'username' => Types::nonNull(Types::string()),
                         'password' => Types::nonNull(Types::string()),
+                    ],
+                ],
+                'register' => [
+                    'type' => Types::register(),
+                    'description' => 'Sign up a new user',
+                    'args' => [
+                        'name' => Types::nonNull(Types::string()),
+                        'email' => Types::nonNull(Types::string()),
+                        'password' => Types::nonNull(Types::string()),
+                        'repeatpassword' => Types::nonNull(Types::string()),
                     ],
                 ],
             ];
@@ -98,6 +108,12 @@ class MutationType extends ObjectType
     }
 
     public function login($rootValue, $args, $context)
+    {
+        $oUser = oxNew(User::class);
+        return $oUser->login($args['username'], $args['password']);
+    }
+
+    public function register($rootValue, $args, $context)
     {
         $oUser = oxNew(User::class);
         return $oUser->login($args['username'], $args['password']);

@@ -39,6 +39,32 @@ class User extends BaseModel
             $oUser->login($sUser, $sPass);
             $aUser =$this->authorizeUser($oUser);
 
+            $oAppContext = oxNew(AppContext::class);
+
+            return $aUser;
+
+        } catch(\Exception $error) {
+            header('HTTP/1.0 401 Unauthorized');
+            throw new Error('Unauthorized');
+        }
+    }
+
+    /**
+     * Sign Up
+     *
+     * @param string $sUser
+     * @param string $sPass
+     * @return array|null
+     */
+    public function register($sUser, $sPass)
+    {
+        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        try {
+            $oUser->login($sUser, $sPass);
+            $aUser =$this->authorizeUser($oUser);
+
+            $oAppContext = oxNew(AppContext::class);
+
             return $aUser;
 
         } catch(\Exception $error) {

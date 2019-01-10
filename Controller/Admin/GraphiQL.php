@@ -40,6 +40,8 @@ class GraphiQL extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDetai
     public function render()
     {
         parent::render();
+        $oConfig = Registry::getConfig();
+        $blGraphiQLTool = $oConfig->getConfigParam('blGraphiQLTool');
 
         $oUser = $this->getUser();
 

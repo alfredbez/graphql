@@ -30,12 +30,19 @@ use GraphQL\Type\Definition\InterfaceType;
 class NodeType extends InterfaceType
 {
     /**
+    * Type name.
+    *
+    * @var string
+    */
+    private $typeName = 'Node';
+
+    /**
      * NodeType constructor.
      */
     public function __construct()
     {
         $config = [
-            'name' => 'Node',
+            'name' => $this->typeName,
             'fields' => [
                 'id' => Types::id()
             ],

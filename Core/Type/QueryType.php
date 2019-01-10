@@ -23,6 +23,7 @@ use OxidProfessionalServices\GraphQl\Model\Category;
 use OxidProfessionalServices\GraphQl\Model\User;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\Type;
 
 /**
  * Class QueryType
@@ -138,6 +139,17 @@ class QueryType extends ObjectType
                 'type' => Types::user(),
                 'description' => 'Represents currently logged-in user'
             ],
+            'deprecatedField' => [
+                'type' => Types::string(),
+                'deprecationReason' => 'This field is deprecated!'
+            ],
+            'fieldWithException' => [
+                'type' => Types::string(),
+                'resolve' => function() {
+                    throw new \Exception("Exception message thrown in field resolver");
+                }
+            ],
+            'welcome' => Type::string()
         ];
 
         /*
@@ -198,6 +210,11 @@ class QueryType extends ObjectType
         $oUser = oxNew(User::class);
         $sViewerId = $context->viewer;
         return $oUser->findUser($sViewerId);
+    }
+
+    public function deprecatedField()
+    {
+        return 'You can request deprecated field, but it is not displayed in auto-generated documentation by default.';
     }
 
     public function welcome()

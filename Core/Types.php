@@ -25,8 +25,9 @@ use OxidProfessionalServices\GraphQl\Core\Type\Object\ActionType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\ArticleType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\CategoryType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\LoginType;
-use OxidProfessionalServices\GraphQl\Core\Type\Object\NodeType;
+use OxidProfessionalServices\GraphQl\Core\Type\Object\RegisterType;
 use OxidProfessionalServices\GraphQl\Core\Type\Object\UserType;
+use OxidProfessionalServices\GraphQl\Core\Type\Object\NodeType;
 
 use OxidProfessionalServices\GraphQl\Core\Type\QueryType;
 use OxidProfessionalServices\GraphQl\Core\Type\MutationType;
@@ -76,6 +77,12 @@ class Types
      *
      */
     private static $category;
+
+    /**
+     * Stores the register type object
+     *
+     */
+    private static $register;
 
     /**
      * Stores the login type object
@@ -178,6 +185,14 @@ class Types
     public static function login()
     {
         return self::$login ?: (self::$login = new LoginType());
+    }
+
+    /**
+     * @return \OxidProfessionalServices\GraphQl\Core\Type\Object\RegisterType
+     */
+    public static function register()
+    {
+        return self::$register ?: (self::$register = new RegisterType());
     }
 
     /**

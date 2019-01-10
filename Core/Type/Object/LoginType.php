@@ -27,13 +27,20 @@ use GraphQL\Type\Definition\ResolveInfo;
 class LoginType extends ObjectType
 {
     /**
+    * Type name.
+    *
+    * @var string
+    */
+    private $typeName = 'Login';
+
+    /**
      * UserType constructor.
      */
     public function __construct()
     {
         $config = [
-            'name' => 'Login',
-            'description' => 'OXID eShop login',
+            'name' => $this->typeName,
+            'description' => 'OXID eShop user sign in',
             'fields' => function () {
                 return [
                     'id' =>  Types::nonNull(Types::id()),
