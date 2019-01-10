@@ -29,14 +29,6 @@ class Article extends BaseModel
     protected $_aArticles = null;
 
     /**
-     * Article class construcotor.
-     */
-    public function __construct()
-    {
-        //$this->getArticles();
-    }
-
-    /**
      * get Articles from the DB
      * @return array|null
      *
@@ -68,6 +60,33 @@ class Article extends BaseModel
     }
 
     /**
+     * get Article by Id from the DB
+     * @return array|null
+     *
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     */
+    public function getArticle($id)
+    {
+        $oDB = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC);
+
+        $sArticlesView = getViewName('oxarticles');
+        $aArticle = $oDB->getRow("SELECT
+            `OXID` AS id,
+            `OXARTNUM` AS sku,
+            `OXTITLE` AS title,
+            `OXSHORTDESC` AS description,
+            `OXPRICE` AS price,
+            `OXTHUMB` AS thumb,
+            `OXICON` AS icon,
+            `OXPIC1` AS image,
+            `OXPARENTID` AS parent
+            FROM `{$sArticlesView}` WHERE `OXID` = '{$id}'");
+
+        return $aArticle;
+    }
+
+    /**
      * Build categoies with the OXID as key.
      *
      * @param array $aArticles
@@ -95,7 +114,10 @@ class Article extends BaseModel
      */
     public function findArticle($id)
     {
-        return isset($this->_aArticles[$id]) ? $this->_aArticles[$id] : null;
+        if($this->_aArticles){
+            return isset($this->_aArticles[$id]) ? $this->_aArticles[$id] : null;
+        }
+         return $this->getArticle($id);
     }
 
     /**
