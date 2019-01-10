@@ -41,7 +41,7 @@ class CategoryType extends ObjectType
     {
         $config = [
             'name' => $this->typeName,
-            'description' => 'OXID eShop categories',
+            'description' => 'OXID eShop category',
             'fields' => function () {
                 return [
                     'id' => Types::id(),
