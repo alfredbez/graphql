@@ -14,24 +14,25 @@
  * @version     OXID eSales GraphQL
  */
 
-namespace OxidProfessionalServices\GraphQl\Core\Type;
+namespace OxidProfessionalServices\GraphQl\Core;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
 use OxidProfessionalServices\GraphQl\Model\Action;
 use OxidProfessionalServices\GraphQl\Model\Article;
 use OxidProfessionalServices\GraphQl\Model\Category;
 use OxidProfessionalServices\GraphQl\Model\User;
-use GraphQL\Type\Definition\ObjectType;
+
+use GraphQL\Type\Definition\ObjectType as GraphQLType;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 
 /**
- * Class QueryType
- * The QueryType is the primary entry for Queries in the GraphQL Schema
+ * Class QueryRoot
+ * The QueryRoot is the primary entry for Queries in the GraphQL Schema
  *
 
  */
-class QueryType extends ObjectType
+class QueryRoot extends GraphQLType
 {
     /**
      * Type name.
@@ -41,7 +42,7 @@ class QueryType extends ObjectType
     private $typeName = 'Query';
 
     /**
-     * QueryType constructor
+     * QueryRoot constructor
      */
     public function __construct()
     {

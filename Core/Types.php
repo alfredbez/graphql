@@ -21,17 +21,17 @@ use OxidProfessionalServices\GraphQl\Core\Type\Enum\ImageSizeEnumType;
 use OxidProfessionalServices\GraphQl\Core\Type\Field\HtmlFieldType;
 use OxidProfessionalServices\GraphQl\Core\Type\Scalar\EmailType;
 use OxidProfessionalServices\GraphQl\Core\Type\Scalar\UrlType;
-use OxidProfessionalServices\GraphQl\Core\Type\Object\ActionType;
-use OxidProfessionalServices\GraphQl\Core\Type\Object\ArticleType;
-use OxidProfessionalServices\GraphQl\Core\Type\Object\CategoryType;
-use OxidProfessionalServices\GraphQl\Core\Type\Object\LoginType;
-use OxidProfessionalServices\GraphQl\Core\Type\Object\RegisterType;
-use OxidProfessionalServices\GraphQl\Core\Type\Object\UserType;
-use OxidProfessionalServices\GraphQl\Core\Type\Object\NodeType;
+use OxidProfessionalServices\GraphQl\Core\Type\ActionType;
+use OxidProfessionalServices\GraphQl\Core\Type\ArticleType;
+use OxidProfessionalServices\GraphQl\Core\Type\CategoryType;
+use OxidProfessionalServices\GraphQl\Core\Type\UserType;
+use OxidProfessionalServices\GraphQl\Core\Type\NodeType;
 
-use OxidProfessionalServices\GraphQl\Core\Type\QueryType;
-use OxidProfessionalServices\GraphQl\Core\Type\MutationType;
-use OxidProfessionalServices\GraphQl\Core\Type\SubscriptionType;
+use OxidProfessionalServices\GraphQl\Core\Mutation\LogInMutation;
+use OxidProfessionalServices\GraphQl\Core\Mutation\SignUpMutation;
+
+use OxidProfessionalServices\GraphQl\Core\QueryRoot;
+use OxidProfessionalServices\GraphQl\Core\MutationRoot;
 
 use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\NonNull;
@@ -47,7 +47,6 @@ use GraphQL\Type\Definition\Type;
  */
 class Types
 {
-    // Object Types
     /**
      * Stores the root query type object
      *
@@ -61,92 +60,59 @@ class Types
     private static $mutation;
 
     /**
-     * Stores the action type object
+     * Query types
      *
      */
     private static $action;
-
-    /**
-     * Stores the article type object
-     *
-     */
     private static $article;
-
-    /**
-     * Stores the category type object
-     *
-     */
     private static $category;
+    private static $user;
 
     /**
-     * Stores the register type object
+     * Mutation types
      *
      */
-    private static $register;
-
-    /**
-     * Stores the login type object
-     *
-     */
+    private static $signup;
     private static $login;
 
     /**
-     * Stores the user type object
-     *
-     */
-    private static $user;
-
-    // Interface types
-    /**
-     * Stores the node type object
+     * Interface types
      *
      */
     private static $node;
 
-    // Enum types
     /**
-     * Stores the image size enum type object
+     * Enum types
      *
      */
     private static $imageSizeEnum;
-
-    /**
-     * Stores the content format enum type object
-     *
-     */
     private static $contentFormatEnum;
-
-    /**
-     * Stores the url type object
-     *
-     */
     private static $urlType;
 
-    // Scalar types
     /**
-     * Stores the email type object
+     * Scalar types
      *
      */
     private static $emailType;
 
 
     /**
-     * Returns the definition for the QueryType
+     * Returns the definition for the QueryRoot type
      *
-     * @return \OxidProfessionalServices\GraphQl\Core\Type\QueryType
+     * @return \OxidProfessionalServices\GraphQl\Core\QueryRoot
      */
     public static function query()
     {
-        return self::$query ?: (self::$query = new QueryType());
+        return self::$query ?: (self::$query = new QueryRoot());
     }
 
     /**
-     * Returns the definition for the QueryType
-     * @return \OxidProfessionalServices\GraphQl\Core\Type\MutationType
+     * Returns the definition for the MutationRoot type
+     * @return \OxidProfessionalServices\GraphQl\Core\MutationRoot
      */
     public static function mutation()
     {
-        return self::$mutation ?: (self::$mutation = new MutationType());
+        return self::$mutation ?: (self::$mutation = new MutationRoot());
     }
 
     /**
@@ -180,28 +146,35 @@ class Types
     }
 
     /**
-     * @return \OxidProfessionalServices\GraphQl\Core\Type\Object\LoginType
-     */
-    public static function login()
-    {
-        return self::$login ?: (self::$login = new LoginType());
-    }
-
-    /**
-     * @return \OxidProfessionalServices\GraphQl\Core\Type\Object\RegisterType
-     */
-    public static function register()
-    {
-        return self::$register ?: (self::$register = new RegisterType());
-    }
-
-    /**
+     * Returns the definition for the UserType
+     *
      * @return \OxidProfessionalServices\GraphQl\Core\Type\Object\UserType
      */
     public static function user()
     {
         return self::$user ?: (self::$user = new UserType());
     }
+
+    /**
+     * Returns the definition for the LogInMutation
+     *
+     * @return \OxidProfessionalServices\GraphQl\Core\Type\Object\LogInMutation
+     */
+    public static function login()
+    {
+        return self::$login ?: (self::$login = new LogInMutation());
+    }
+
+    /**
+     * Returns the definition for the SignUpMutation
+     *
+     * @return \OxidProfessionalServices\GraphQl\Core\Mutation\SignUpMutation
+     */
+    public static function signup()
+    {
+        return self::$signup ?: (self::$signup = new SignUpMutation());
+    }
+
     /**
      * Returns the definition for the NodeType
      *

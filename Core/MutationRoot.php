@@ -14,22 +14,21 @@
  * @version     OXID eSales GraphQL
  */
 
-namespace OxidProfessionalServices\GraphQl\Core\Type;
+namespace OxidProfessionalServices\GraphQl\Core;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
 use OxidProfessionalServices\GraphQl\Core\AppContext;
 use OxidProfessionalServices\GraphQl\Model\DataSource;
 use OxidProfessionalServices\GraphQl\Model\User;
 
-
-use GraphQL\Type\Definition\ObjectType;
+use GraphQL\Type\Definition\ObjectType as GraphQLType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
- * Class MutationType
- * The MutationType is the primary entry point for Mutations in the GraphQL Schema
+ * Class MutationRoot
+ * The MutationRoot is the primary entry point for Mutations in the GraphQL Schema
  */
-class MutationType extends ObjectType
+class MutationRoot extends GraphQLType
 {
     /**
      * Type name
@@ -46,7 +45,7 @@ class MutationType extends ObjectType
     private $fields;
 
     /**
-     * MutationType constructor
+     * MutationRoot constructor
      */
     public function __construct()
     {
@@ -74,7 +73,6 @@ class MutationType extends ObjectType
     public function fields()
     {
         if ( null === $this->fields ) {
-            //TODO
             $fields             = [
                 'login' => [
                     'type' => Types::login(),
@@ -84,14 +82,13 @@ class MutationType extends ObjectType
                         'password' => Types::nonNull(Types::string()),
                     ],
                 ],
-                'register' => [
-                    'type' => Types::register(),
+                'signup' => [
+                    'type' => Types::signup(),
                     'description' => 'Sign up a new user',
                     'args' => [
                         'name' => Types::nonNull(Types::string()),
                         'email' => Types::nonNull(Types::string()),
                         'password' => Types::nonNull(Types::string()),
-                        'repeatpassword' => Types::nonNull(Types::string()),
                     ],
                 ],
             ];
@@ -113,7 +110,7 @@ class MutationType extends ObjectType
         return $oUser->login($args['username'], $args['password']);
     }
 
-    public function register($rootValue, $args, $context)
+    public function signup($rootValue, $args, $context)
     {
         $oUser = oxNew(User::class);
         return $oUser->login($args['username'], $args['password']);

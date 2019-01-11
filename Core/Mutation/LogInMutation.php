@@ -14,44 +14,45 @@
  * @version     OXID eSales GraphQL
  */
 
-namespace OxidProfessionalServices\GraphQl\Core\Type\Object;
+namespace OxidProfessionalServices\GraphQl\Core\Mutation;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
-use OxidProfessionalServices\GraphQl\Model\Action;
-use GraphQL\Type\Definition\ObjectType;
+use OxidProfessionalServices\GraphQl\Model\User;
+
+use GraphQL\Type\Definition\ObjectType as GraphQLType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
- * Class GraphQL ActionType.
+ * Class GraphQL LogInMutation.
  */
-class ActionType extends ObjectType
+class LogInMutation extends GraphQLType
 {
     /**
-     * Type name.
-     *
-     * @var string
-     */
-    private $typeName = 'Action';
+    * Type name.
+    *
+    * @var string
+    */
+    private $typeName = 'Login';
 
     /**
-     * ActionType constructor.
+     * LogInMutation constructor.
      */
     public function __construct()
     {
         $config = [
             'name' => $this->typeName,
-            'description' => 'OXID eShop actions',
+            'description' => 'OXID eShop user sign in',
             'fields' => function () {
                 return [
-                    'id' => Types::id(),
-                    'title' => Types::string(),
-                    'description' => Types::string(),
-                    'image' => Types::string(),
-                    'link' => Types::string()
+                    'email' => [
+                        'type' => Types::nonNull(Types::string()),
+                        'rules' => ['required', 'email'],
+                    ],
+                    'token' =>  Types::nonNull(Types::string()),
                 ];
             },
             'interfaces' => [
-                Types::node(),
+                Types::node()
             ],
             'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
                 $method = 'resolve'.ucfirst($info->fieldName);
@@ -65,4 +66,5 @@ class ActionType extends ObjectType
 
         parent::__construct($config);
     }
+
 }

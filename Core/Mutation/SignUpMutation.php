@@ -14,41 +14,52 @@
  * @version     OXID eSales GraphQL
  */
 
-namespace OxidProfessionalServices\GraphQl\Core\Type\Object;
+namespace OxidProfessionalServices\GraphQl\Core\Mutation;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
 use OxidProfessionalServices\GraphQl\Model\User;
-use GraphQL\Type\Definition\ObjectType;
+
+use GraphQL\Type\Definition\ObjectType as GraphQLType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
- * Class GraphQL UserType.
+ * Class GraphQL SignUpMutation.
  */
-class LoginType extends ObjectType
+class SignUpMutation extends GraphQLType
 {
     /**
     * Type name.
     *
     * @var string
     */
-    private $typeName = 'Login';
+    private $typeName = 'SignUp';
 
     /**
-     * UserType constructor.
+     * SignUpMutation constructor.
      */
     public function __construct()
     {
         $config = [
             'name' => $this->typeName,
-            'description' => 'OXID eShop user sign in',
+            'description' => 'OXID eShop user sign up',
             'fields' => function () {
                 return [
                     'id' =>  Types::nonNull(Types::id()),
-                    'token' =>  Types::nonNull(Types::string()),
-                    'email' => Types::email(),
-                    'clientNumber' => Types::string(),
-                    'firstName' => Types::string(),
-                    'lastName' => Types::string()
+                    'name' => [
+                        'name' => 'name',
+                        'type' => Types::nonNull(Types::string()),
+                        'rules' => ['required'],
+                      ],
+                    'email' => [
+                    'name' => 'email',
+                    'type' => Types::nonNull(Types::string()),
+                    'rules' => ['required', 'email', 'unique:users'],
+                    ],
+                    'password' => [
+                    'name' => 'password',
+                    'type' => Types::nonNull(Types::string()),
+                    'rules' => ['required'],
+                    ],
                 ];
             },
             'interfaces' => [

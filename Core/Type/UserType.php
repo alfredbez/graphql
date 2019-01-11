@@ -14,7 +14,7 @@
  * @version     OXID eSales GraphQL
  */
 
-namespace OxidProfessionalServices\GraphQl\Core\Type\Object;
+namespace OxidProfessionalServices\GraphQl\Core\Type;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
 use OxidProfessionalServices\GraphQl\Model\User;
@@ -49,7 +49,7 @@ class UserType extends ObjectType
                     'number' => Types::int(),
                     'firstName' => Types::string(),
                     'lastName' => Types::string(),
-                    'token' => Types::string(),
+                    'token' => Types::string()
                 ];
             },
             'interfaces' => [

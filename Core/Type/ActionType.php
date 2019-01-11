@@ -14,45 +14,44 @@
  * @version     OXID eSales GraphQL
  */
 
-namespace OxidProfessionalServices\GraphQl\Core\Type\Object;
+namespace OxidProfessionalServices\GraphQl\Core\Type;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
-use OxidProfessionalServices\GraphQl\Model\User;
+use OxidProfessionalServices\GraphQl\Model\Action;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
- * Class GraphQL UserType.
+ * Class GraphQL ActionType.
  */
-class RegisterType extends ObjectType
+class ActionType extends ObjectType
 {
     /**
-    * Type name.
-    *
-    * @var string
-    */
-    private $typeName = 'Register';
+     * Type name.
+     *
+     * @var string
+     */
+    private $typeName = 'Action';
 
     /**
-     * UserType constructor.
+     * ActionType constructor.
      */
     public function __construct()
     {
         $config = [
             'name' => $this->typeName,
-            'description' => 'OXID eShop user sign up',
+            'description' => 'OXID eShop actions',
             'fields' => function () {
                 return [
-                    'id' =>  Types::nonNull(Types::id()),
-                    'token' =>  Types::nonNull(Types::string()),
-                    'email' => Types::email(),
-                    'clientNumber' => Types::string(),
-                    'firstName' => Types::string(),
-                    'lastName' => Types::string()
+                    'id' => Types::id(),
+                    'title' => Types::string(),
+                    'description' => Types::string(),
+                    'image' => Types::string(),
+                    'link' => Types::string()
                 ];
             },
             'interfaces' => [
-                Types::node()
+                Types::node(),
             ],
             'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
                 $method = 'resolve'.ucfirst($info->fieldName);
@@ -66,5 +65,4 @@ class RegisterType extends ObjectType
 
         parent::__construct($config);
     }
-
 }
