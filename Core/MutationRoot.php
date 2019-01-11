@@ -82,13 +82,16 @@ class MutationRoot extends GraphQLType
                         'password' => Types::nonNull(Types::string()),
                     ],
                 ],
-                'signup' => [
-                    'type' => Types::signup(),
+                'createUser' => [
+                    'type' => Types::createUser(),
                     'description' => 'Sign up a new user',
                     'args' => [
                         'name' => Types::nonNull(Types::string()),
                         'email' => Types::nonNull(Types::string()),
                         'password' => Types::nonNull(Types::string()),
+                        'repeatPassword' => Types::nonNull(Types::string()),
+                        'billingAdress' => Types::nonNull(Types::string()),
+                        'deliveryAddress' => Types::nonNull(Types::string()),
                     ],
                 ],
             ];
@@ -110,9 +113,22 @@ class MutationRoot extends GraphQLType
         return $oUser->login($args['username'], $args['password']);
     }
 
-    public function signup($rootValue, $args, $context)
+    public function createUser($rootValue, $args, $context)
     {
+        // collecting values to check
+        $sUser = $args['email'];
+        $sEmail = $args['email'];
+        $sPassword = $args['password'];
+        $sPassword2 = $args['repeatPassword'];
+
+        $aBillAdress = [
+            "street" => $args['billingAdress']
+        ];
+        $aDelAdress = [
+            "street" => $args['deliveryAddress']
+        ];
+
         $oUser = oxNew(User::class);
-        return $oUser->login($args['username'], $args['password']);
+        return $oUser->createUser($sUser, $sEmail, $sPassword, $sPassword2, $aBillAdress, $aDelAdress);
     }
 }

@@ -23,19 +23,19 @@ use GraphQL\Type\Definition\ObjectType as GraphQLType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
- * Class GraphQL SignUpMutation.
+ * Class GraphQL CreateUserMutation.
  */
-class SignUpMutation extends GraphQLType
+class CreateUserMutation extends GraphQLType
 {
     /**
     * Type name.
     *
     * @var string
     */
-    private $typeName = 'SignUp';
+    private $typeName = 'CreateUser';
 
     /**
-     * SignUpMutation constructor.
+     * CreateUserMutation constructor.
      */
     public function __construct()
     {
@@ -45,21 +45,11 @@ class SignUpMutation extends GraphQLType
             'fields' => function () {
                 return [
                     'id' =>  Types::nonNull(Types::id()),
-                    'name' => [
-                        'name' => 'name',
+                    'username' => [
                         'type' => Types::nonNull(Types::string()),
-                        'rules' => ['required'],
-                      ],
-                    'email' => [
-                    'name' => 'email',
-                    'type' => Types::nonNull(Types::string()),
-                    'rules' => ['required', 'email', 'unique:users'],
+                        'rules' => ['required', 'email', 'unique:users'],
                     ],
-                    'password' => [
-                    'name' => 'password',
-                    'type' => Types::nonNull(Types::string()),
-                    'rules' => ['required'],
-                    ],
+                    'token' =>  Types::nonNull(Types::string()),
                 ];
             },
             'interfaces' => [

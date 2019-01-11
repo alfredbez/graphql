@@ -5,23 +5,12 @@
 
     <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/es6-promise/4.0.5/es6-promise.auto.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/fetch/0.9.0/fetch.min.js"></script>
     <script src="[{$oViewConf->getModuleUrl('oxps/graphql','out/src/js/graphiql.min.js')}]"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/theme/solarized.css" />
     <link rel="stylesheet" type="text/css" href="[{$oViewConf->getModuleUrl('oxps/graphql','out/src/css/graphiql.css')}]">
-
-    <style>
-        body {
-            height: 100%;
-            margin: 0;
-            width: 100%;
-            overflow: hidden;
-        }
-        #graphiql {
-            height: 100vh;
-        }
-    </style>
 </head>
 <body>
     <noscript>
@@ -30,7 +19,7 @@
 
     <div id="graphiql">Loading...</div>
 
-    <script type="text/babel">
+    <script>
         // Parse the search string to get url parameters.
         var search = window.location.search;
         var parameters = {};
@@ -56,28 +45,15 @@
         // When the query and variables string is edited, update the URL bar so
         // that it can be easily shared
         function onEditQuery(newQuery) {
-        parameters.query = newQuery;
-        updateURL();
+            parameters.query = newQuery;
         }
 
         function onEditVariables(newVariables) {
-        parameters.variables = newVariables;
-        updateURL();
+            parameters.variables = newVariables;
         }
 
         function onEditOperationName(newOperationName) {
-        parameters.operationName = newOperationName;
-        updateURL();
-        }
-
-        function updateURL() {
-        var newSearch = '?' + Object.keys(parameters).filter(function (key) {
-            return Boolean(parameters[key]);
-        }).map(function (key) {
-            return encodeURIComponent(key) + '=' +
-            encodeURIComponent(parameters[key]);
-        }).join('&');
-        history.replaceState(null, null, newSearch);
+            parameters.operationName = newOperationName;
         }
 
         // Defines a GraphQL fetcher using the fetch API. You're not required to
@@ -105,17 +81,17 @@
             });
         }
 
-    ReactDOM.render(
-        <GraphiQL
-        fetcher= {graphQLFetcher}
-        query= {parameters.query}
-        variables= {parameters.variables}
-        operationName= {parameters.operationName}
-        onEditQuery= {onEditQuery}
-        onEditVariables= {onEditVariables}
-        onEditOperationName= {onEditOperationName}
-        />,
-        document.getElementById('graphiql')
-    );
+        ReactDOM.render(
+            React.createElement(GraphiQL, {
+                fetcher: graphQLFetcher,
+                query: parameters.query,
+                variables: parameters.variables,
+                operationName: parameters.operationName,
+                onEditQuery: onEditQuery,
+                onEditVariables: onEditVariables,
+                onEditOperationName: onEditOperationName
+            }),
+            document.getElementById('graphiql')
+        );
     </script>
 </body>

@@ -44,9 +44,9 @@ class LogInMutation extends GraphQLType
             'description' => 'OXID eShop user sign in',
             'fields' => function () {
                 return [
-                    'email' => [
-                        'type' => Types::nonNull(Types::string()),
-                        'rules' => ['required', 'email'],
+                    'id' => [
+                        'type' => Types::nonNull(Types::id()),
+                        'description' => 'The id of a user'
                     ],
                     'token' =>  Types::nonNull(Types::string()),
                 ];

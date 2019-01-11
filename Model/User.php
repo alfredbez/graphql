@@ -37,39 +37,89 @@ class User extends BaseModel
         $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
         try {
             $oUser->login($sUser, $sPass);
-            $aUser =$this->authorizeUser($oUser);
 
-            $oAppContext = oxNew(AppContext::class);
-
-            return $aUser;
+            // finalizing ...
+            return $this->authorizeUser($oUser);
 
         } catch(\Exception $error) {
             header('HTTP/1.0 401 Unauthorized');
-            throw new Error('Unauthorized');
+            throw new Error($error->getMessage());
         }
     }
 
     /**
      * Sign Up
      *
-     * @param string $sUser
-     * @param string $sPass
      * @return array|null
      */
-    public function register($sUser, $sPass)
+    public function createUser($sUser, $sEmail, $sPassword, $sPassword2, $aBillAdress, $aDelAdress)
     {
         $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+
         try {
-            $oUser->login($sUser, $sPass);
-            $aUser =$this->authorizeUser($oUser);
+            //TODO
+            //$oUser->checkValues($sUser, $sPassword, $sPassword2, $aBillAdress, $aDelAdress);
 
-            $oAppContext = oxNew(AppContext::class);
+            $iActState = $blActiveLogin ? 0 : 1;
 
-            return $aUser;
+            // setting values
+            $oUser->oxuser__oxusername = new \OxidEsales\Eshop\Core\Field($sUser, \OxidEsales\Eshop\Core\Field::T_RAW);
+            $oUser->setPassword($sPassword);
+            $oUser->oxuser__oxactive = new \OxidEsales\Eshop\Core\Field($iActState, \OxidEsales\Eshop\Core\Field::T_RAW);
+
+            // used for checking if user email currently subscribed
+            $iSubscriptionStatus = $oUser->getNewsSubscription()->getOptInStatus();
+
+            $database = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+            $database->startTransaction();
+
+            try {
+                $oUser->createUser();
+                //TODO
+                //$oUser = $this->configureUserBeforeCreation($oUser);
+                $oUser->load($oUser->getId());
+                //$oUser->changeUserData($oUser->oxuser__oxusername->value, $sPassword, $sPassword, $aBillAdress, $aDelAdress);
+
+                if ($blActiveLogin) {
+                    // accepting terms...
+                    $oUser->acceptTerms();
+                }
+
+                $database->commitTransaction();
+
+            } catch (Exception $exception) {
+                $database->rollbackTransaction();
+
+                throw $exception;
+            }
+
+            $sUserId = \OxidEsales\Eshop\Core\Registry::getSession()->getVariable("su");
+            $sRecEmail = \OxidEsales\Eshop\Core\Registry::getSession()->getVariable("re");
+            if ($this->getConfig()->getConfigParam('blInvitationsEnabled') && $sUserId && $sRecEmail) {
+                // setting registration credit points..
+                $oUser->setCreditPointsForRegistrant($sUserId, $sRecEmail);
+            }
+
+            // assigning to newsletter
+            $blOptin = \OxidEsales\Eshop\Core\Registry::getConfig()->getRequestParameter('blnewssubscribed');
+            if ($blOptin && $iSubscriptionStatus == 1) {
+                // if user was assigned to newsletter
+                // and is creating account with newsletter checked,
+                // don't require confirm
+                $oUser->getNewsSubscription()->setOptInStatus(1);
+                $oUser->addToGroup('oxidnewsletter');
+                $this->_blNewsSubscriptionStatus = 1;
+            } else {
+                $blOrderOptInEmailParam = $this->getConfig()->getConfigParam('blOrderOptInEmail');
+                $this->_blNewsSubscriptionStatus = $oUser->setNewsSubscription($blOptin, $blOrderOptInEmailParam);
+            }
+
+            $oUser->addToGroup('oxidnotyetordered');
+            return $this->authorizeUser($oUser);
 
         } catch(\Exception $error) {
             header('HTTP/1.0 401 Unauthorized');
-            throw new Error('Unauthorized');
+            throw new Error($error->getMessage());
         }
     }
 
@@ -107,4 +157,5 @@ class User extends BaseModel
 
         return $this->authorizeUser($oUser);
     }
+
 }

@@ -28,7 +28,7 @@ use OxidProfessionalServices\GraphQl\Core\Type\UserType;
 use OxidProfessionalServices\GraphQl\Core\Type\NodeType;
 
 use OxidProfessionalServices\GraphQl\Core\Mutation\LogInMutation;
-use OxidProfessionalServices\GraphQl\Core\Mutation\SignUpMutation;
+use OxidProfessionalServices\GraphQl\Core\Mutation\CreateUserMutation;
 
 use OxidProfessionalServices\GraphQl\Core\QueryRoot;
 use OxidProfessionalServices\GraphQl\Core\MutationRoot;
@@ -72,7 +72,7 @@ class Types
      * Mutation types
      *
      */
-    private static $signup;
+    private static $createUser;
     private static $login;
 
     /**
@@ -166,13 +166,13 @@ class Types
     }
 
     /**
-     * Returns the definition for the SignUpMutation
+     * Returns the definition for the CreateUserMutation
      *
-     * @return \OxidProfessionalServices\GraphQl\Core\Mutation\SignUpMutation
+     * @return \OxidProfessionalServices\GraphQl\Core\Mutation\CreateUserMutation
      */
-    public static function signup()
+    public static function createUser()
     {
-        return self::$signup ?: (self::$signup = new SignUpMutation());
+        return self::$createUser ?: (self::$createUser = new CreateUserMutation());
     }
 
     /**
