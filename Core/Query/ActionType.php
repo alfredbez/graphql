@@ -14,17 +14,18 @@
  * @version     OXID eSales GraphQL
  */
 
-namespace OxidProfessionalServices\GraphQl\Core\Type;
+namespace OxidProfessionalServices\GraphQl\Core\Query;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
 use OxidProfessionalServices\GraphQl\Model\Action;
-use GraphQL\Type\Definition\ObjectType;
+
+use GraphQL\Type\Definition\ObjectType as GraphQLType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
  * Class GraphQL ActionType.
  */
-class ActionType extends ObjectType
+class ActionType extends GraphQLType
 {
     /**
      * Type name.

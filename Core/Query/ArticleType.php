@@ -14,18 +14,19 @@
  * @version     OXID eSales GraphQL
  */
 
-namespace OxidProfessionalServices\GraphQl\Core\Type;
+namespace OxidProfessionalServices\GraphQl\Core\Query;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
 use OxidProfessionalServices\GraphQl\Model\Article;
 use OxidProfessionalServices\GraphQl\Model\Category;
-use GraphQL\Type\Definition\ObjectType;
+
+use GraphQL\Type\Definition\ObjectType as GraphQLType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
  * Class GraphQL ArticleType.
  */
-class ArticleType extends ObjectType
+class ArticleType extends GraphQLType
 {
     /**
      * Type name.

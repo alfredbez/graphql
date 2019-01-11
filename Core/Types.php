@@ -21,11 +21,12 @@ use OxidProfessionalServices\GraphQl\Core\Type\Enum\ImageSizeEnumType;
 use OxidProfessionalServices\GraphQl\Core\Type\Field\HtmlFieldType;
 use OxidProfessionalServices\GraphQl\Core\Type\Scalar\EmailType;
 use OxidProfessionalServices\GraphQl\Core\Type\Scalar\UrlType;
-use OxidProfessionalServices\GraphQl\Core\Type\ActionType;
-use OxidProfessionalServices\GraphQl\Core\Type\ArticleType;
-use OxidProfessionalServices\GraphQl\Core\Type\CategoryType;
-use OxidProfessionalServices\GraphQl\Core\Type\UserType;
 use OxidProfessionalServices\GraphQl\Core\Type\NodeType;
+
+use OxidProfessionalServices\GraphQl\Core\Query\ActionType;
+use OxidProfessionalServices\GraphQl\Core\Query\ArticleType;
+use OxidProfessionalServices\GraphQl\Core\Query\CategoryType;
+use OxidProfessionalServices\GraphQl\Core\Query\UserType;
 
 use OxidProfessionalServices\GraphQl\Core\Mutation\LogInMutation;
 use OxidProfessionalServices\GraphQl\Core\Mutation\CreateUserMutation;

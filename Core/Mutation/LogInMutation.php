@@ -46,9 +46,12 @@ class LogInMutation extends GraphQLType
                 return [
                     'id' => [
                         'type' => Types::nonNull(Types::id()),
-                        'description' => 'The id of a user'
+                        'description' => 'The Oxid User ID'
                     ],
-                    'token' =>  Types::nonNull(Types::string()),
+                    'token' =>  [
+                        'type' => Types::nonNull(Types::string()),
+                        'description' => 'JWT for the authenticated user'
+                    ],
                 ];
             },
             'interfaces' => [

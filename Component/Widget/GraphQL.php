@@ -132,13 +132,14 @@ class GraphQL extends \OxidEsales\Eshop\Application\Component\Widget\WidgetContr
      */
     private function setAppContext()
     {
+        $this->_oAppContext = oxNew(AppContext::class);
+
         $oAuth = oxNew(Auth::class);
         $aContext = $oAuth->authorize();
-
-        $this->_oAppContext = oxNew(AppContext::class);
-        $this->_oAppContext->request = !empty( $_REQUEST ) ? $_REQUEST : null;
         $this->_oAppContext->viewer = $aContext->sub;
         $this->_oAppContext->rootUrl = $aContext->aud;
+
+        $this->_oAppContext->request = !empty( $_REQUEST ) ? $_REQUEST : null;
 
         return $this->_oAppContext;
     }

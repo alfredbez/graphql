@@ -14,17 +14,18 @@
  * @version     OXID eSales GraphQL
  */
 
-namespace OxidProfessionalServices\GraphQl\Core\Type;
+namespace OxidProfessionalServices\GraphQl\Core\Query;
 
 use OxidProfessionalServices\GraphQl\Core\Types;
 use OxidProfessionalServices\GraphQl\Model\User;
-use GraphQL\Type\Definition\ObjectType;
+
+use GraphQL\Type\Definition\ObjectType as GraphQLType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
  * Class GraphQL UserType.
  */
-class UserType extends ObjectType
+class UserType extends GraphQLType
 {
     /**
     * Type name.
