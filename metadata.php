@@ -67,6 +67,13 @@ $aModule = [
     ],
     'settings'    => [
         [
+            'group' =>  'token',
+            'name'  =>  'strGraphQLApiTokenName',
+            'type'  =>  'str',
+            'value' =>  '',
+            'action' => 'generateApiToken'
+        ],
+        [
             'group' =>  'credentials',
             'name'  =>  'strGraphQLApiKey',
             'type'  =>  'str',
@@ -97,6 +104,16 @@ $aModule = [
             'name'  =>  'blVoyagerTool',
             'type'  =>  'bool',
             'value' =>  true,
+        ],
+        [
+            'group' =>  'tools',
+            'name'  =>  'strGraphQLApiToken',
+            'type'  =>  'none',
+        ],
+        [
+            'group' =>  'tools',
+            'name'  =>  'arrGraphQLApiTokens',
+            'type'  =>  'none',
         ],
     ],
     'events'      => [

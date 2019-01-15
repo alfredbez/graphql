@@ -16,6 +16,7 @@
 
 namespace OxidProfessionalServices\GraphQl\Controller\Admin;
 use OxidEsales\Eshop\Core\Module\ModuleVariablesLocator;
+use OxidProfessionalServices\GraphQl\Core\Auth;
 
 /**
  *
@@ -39,6 +40,13 @@ class ModuleConfiguration extends \OxidEsales\Eshop\Application\Controller\Admin
     public function render()
     {
         $sRet = parent::render();
+        $oConfig = $this->getConfig();
+        $sNameToken =$this->_aViewData["confstrs"]["strGraphQLApiTokenName"];
+        $blPromtToken = $oConfig->getConfigParam('blGraphQLApiTokenPromt');
+
+        if($sNameToken && $blPromtToken){
+            $oConfig->setConfigParam('blGraphQLApiTokenPromt', $blPromtToken);
+        }
         $this->_aViewData["confactions"] = $this->_aMetadataConfVars['actions'];
 
         return $sRet;
@@ -51,8 +59,8 @@ class ModuleConfiguration extends \OxidEsales\Eshop\Application\Controller\Admin
      */
     public function generateApiKey()
     {
-        $sToken = base64_encode(openssl_random_pseudo_bytes(16));
-        $_POST['confstrs']['strGraphQLApiKey'] = $sToken;
+        $sKey = base64_encode(openssl_random_pseudo_bytes(16));
+        $_POST['confstrs']['strGraphQLApiKey'] = $sKey;
         $this->saveConfVars();
     }
 
@@ -63,8 +71,44 @@ class ModuleConfiguration extends \OxidEsales\Eshop\Application\Controller\Admin
      */
     public function generateApiSecret()
     {
-        $sToken = base64_encode(openssl_random_pseudo_bytes(64));
-        $_POST['confstrs']['strGraphQLApiSecret'] = $sToken;
+        $sSecret= base64_encode(openssl_random_pseudo_bytes(64));
+        $_POST['confstrs']['strGraphQLApiSecret'] = $sSecret;
+        $this->saveConfVars();
+    }
+
+    /**
+     * Create a GraphQL ApiToken,
+     * This a unique string, could be used to validate a token
+     *
+     */
+    public function createApiToken()
+    {
+        $oConfig = $this->getConfig();
+
+        $oUser = $this->getUser();
+        $oAuth = oxNew(Auth::class);
+        $sJWToken = $oAuth->sign($oUser);
+        $arrToken = $oConfig->getConfigParam('arrGraphQLApiTokens');
+        $arrToken[$_POST["confstrs"]["strGraphQLApiTokenName"]] = date('Y-m-d H:i:s', time());
+        $arrQuery = var_export($arrToken, true);
+
+        $_POST['confstrs']['strGraphQLApiToken'] = $sJWToken;
+        $_POST['confaarrs']['arrGraphQLApiTokens'] = $arrQuery;
+        $oConfig->setConfigParam('blGraphQLApiTokenPromt', true);
+        $this->saveConfVars();
+    }
+
+    /**
+     * Delete a GraphQL ApiToken,
+     * This a unique string, could be used to validate a token
+     *
+     */
+    public function deleteApiToken()
+    {
+        $_POST['confstrs']['strGraphQLApiToken'] = null;
+        $_POST['confstrs']['strGraphQLApiTokenName'] = null;
+        $_POST['confaarrs']['arrGraphQLApiTokens'] = null;
+
         $this->saveConfVars();
     }
 

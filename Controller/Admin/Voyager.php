@@ -41,12 +41,8 @@ class Voyager extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDetail
     {
         parent::render();
         $oConfig = Registry::getConfig();
-        $blGraphiQLTool = $oConfig->getConfigParam('blGraphiQLTool');
+        $sJwt = $oConfig->getConfigParam('strGraphQLApiToken');
 
-        $oUser = $this->getUser();
-
-        $oAuth = oxNew(Auth::class);
-        $sJwt = $oAuth->sign($oUser);
         $this->_aViewData["sBearer"] = $sJwt;
 
         return $this->_sThisTemplate;

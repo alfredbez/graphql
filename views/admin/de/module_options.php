@@ -19,9 +19,14 @@ $sLangName = 'Deutsch';
 $aLang = [
     'charset'                               => 'UTF-8',
 
-    'SHOP_MODULE_GROUP_credentials'         => 'Entwickleranmeldeinformationen',
+    'SHOP_MODULE_GROUP_credentials'         => 'Anmeldeinformationen',
+    'SHOP_MODULE_GROUP_token'               => 'Long-Lived Access Tokens',
     'SHOP_MODULE_GROUP_tools'               => 'Entwickler Tools',
 
+    'SHOP_MODULE_strGraphQLApiToken'        => '',
+    'SHOP_MODULE_strGraphQLApiTokenName'    => '',
+    'SHOP_MODULE_arrGraphQLApiTokens'       => '',
+    'HELP_SHOP_MODULE_strGraphQLApiTokenName'   => 'Generieren Sie ein einjähriges GraphQL-API-Token für Entwickler, das mit diesem Shop verwendet werden kann',
     'SHOP_MODULE_strGraphQLApiKey'          => 'API Key',
     'HELP_SHOP_MODULE_strGraphQLApiKey'     => 'Generieren Sie den Entwickler GraphQL-API-Schlüssel zur Verwendung mit diesem Shop',
     'SHOP_MODULE_strGraphQLApiSecret'       => 'API Secret',
@@ -38,4 +43,8 @@ $aLang = [
     'MODULE_REGENERATE'                     => 'Regenerieren',
     'MODULE_HIDE'                           => 'API Secret ausblenden',
     'MODULE_SHOW'                           => 'API Secret anzeigent',
+    'MODULE_CREATE_TOKEN'                   => 'Token Erstellen',
+    'MODULE_DELETE_TOKEN'                   => 'Token Löschen',
+    'MODULE_COPY_TOKEN'                     => 'Copy your access token. It will not be shown again.',
+    'MODULE_CREATED_AT'                     => 'Created at: %s',
 ];

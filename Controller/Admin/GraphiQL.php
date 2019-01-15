@@ -41,11 +41,7 @@ class GraphiQL extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDetai
     {
         parent::render();
         $oConfig = Registry::getConfig();
-
-        $oUser = $this->getUser();
-
-        $oAuth = oxNew(Auth::class);
-        $sJwt = $oAuth->sign($oUser);
+        $sJwt = $oConfig->getConfigParam('strGraphQLApiToken');
         $this->_aViewData["sBearer"] = $sJwt;
 
         return $this->_sThisTemplate;
