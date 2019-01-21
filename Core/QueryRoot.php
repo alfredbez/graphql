@@ -140,9 +140,9 @@ class QueryRoot extends GraphQLType
                 'type' => Types::user(),
                 'description' => 'Represents currently logged-in user'
             ],
-            'deprecatedField' => [
+            'deprecatedPictureField' => [
                 'type' => Types::string(),
-                'deprecationReason' => 'This field is deprecated!'
+                'deprecationReason' => 'This field is deprecated!, it will be removed in next version use <getImage> instead'
             ],
             'fieldWithException' => [
                 'type' => Types::string(),
@@ -213,7 +213,7 @@ class QueryRoot extends GraphQLType
         return $oUser->findUser($sViewerId);
     }
 
-    public function deprecatedField()
+    public function deprecatedPictureField()
     {
         return 'You can request deprecated field, but it is not displayed in auto-generated documentation by default.';
     }
