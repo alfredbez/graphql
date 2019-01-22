@@ -6,6 +6,11 @@
 
 ## Install using a local repository
 
+* Add the graphql endpoint in the .htaccess (line 6)
+    ```
+            RewriteRule ^(graphql/)    widget.php?cl=graphql   [NC,L]
+    ```
+
 * Create a local directory if not exists for repositories in your project,
     e.g. `oxideshop/extensions`.
 * Check-out this module and move it to the directory you just created
